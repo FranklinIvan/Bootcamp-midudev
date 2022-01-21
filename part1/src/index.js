@@ -5,6 +5,10 @@ import ReactDOM from 'react-dom'
 //   return <p>No feedback given</p>
 // }
 
+const NotFeedbackGiven = () => {
+  return <p>No feedback given</p>
+}
+
 const Statistic = ({text, value}) => {
   return (
     <table>
@@ -27,8 +31,8 @@ const Statistic = ({text, value}) => {
 const Statistics = ({good, neutral, bad}) => {
   
   const all = good + neutral + bad;
-  const average = all / 3;
-  const positive = good / all * 100 || 0;
+  const average = (all / 3).toFixed(1)
+  const positive = (good / all * 100 || 0).toFixed(1);
 
   return (
     <div>
@@ -37,7 +41,7 @@ const Statistics = ({good, neutral, bad}) => {
       <Statistic text={'bad'} value={bad} />
       <Statistic text={'all'} value={all} />
       <Statistic text={'average'} value={average} />
-      <Statistic text={'positive'} value={positive} />
+      <Statistic text={'positive'} value={positive + ' %'} />
     </div>
   )
 }
@@ -67,7 +71,11 @@ const App = () => {
       <button onClick={handleClickNeutral}>neutral</button>
       <button onClick={handleClickBad} >bad</button>
       <h1>Statistic</h1>
-      <Statistics good={good} neutral={neutral} bad={bad}/>
+      {
+        good === 0 && neutral === 0 && bad === 0
+        ? <NotFeedbackGiven />
+        : <Statistics good={good} neutral={neutral} bad={bad}/>
+      }
     </div>
   )
 }
