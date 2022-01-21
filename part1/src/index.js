@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-// const NoFeedbackGiven = () => {
-//   return <p>No feedback given</p>
-// }
+const NotFeedbackGiven = () => <p>No feedback given</p>
 
-const NotFeedbackGiven = () => {
-  return <p>No feedback given</p>
+const Button = ({text, handleClick}) => {
+  return <button onClick={handleClick}>{text}</button>
 }
 
 const Statistic = ({text, value}) => {
@@ -28,6 +26,7 @@ const Statistic = ({text, value}) => {
   )
   
 }
+
 const Statistics = ({good, neutral, bad}) => {
   
   const all = good + neutral + bad;
@@ -67,10 +66,10 @@ const App = () => {
   return (
     <div>
       <h1>give feedback</h1>
-      <button onClick={handleClickGood}>good</button>
-      <button onClick={handleClickNeutral}>neutral</button>
-      <button onClick={handleClickBad} >bad</button>
-      <h1>Statistic</h1>
+      <Button text={'good'} handleClick={handleClickGood} />
+      <Button text={'neutral'} handleClick={handleClickNeutral} />
+      <Button text={'bad'} handleClick={handleClickBad} />
+      <h1>Statistics</h1>
       {
         good === 0 && neutral === 0 && bad === 0
         ? <NotFeedbackGiven />
