@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
+const Title = ({text}) => <h1>{text}</h1>
+const Button = ({text, handleClick}) => <button onClick={handleClick}>{text}</button>
+const Votes = ({votes}) => <p>Has {votes} votes</p>
+
 const points = {
     'anecdote': 0, // This is the initial state
 
-    0: 0, // If it hurts, do it more often..
-    1: 0, // Adding manpower to a late software project makes it later!
+    0: 1, // If it hurts, do it more often..
+    1: 2, // Adding manpower to a late software project makes it later!
     2: 0, // ...
     3: 0, // ...
     4: 0, // ...
@@ -13,13 +17,17 @@ const points = {
 }
 
 const App = ({anecdotes}) => {
+    
   const [selected, setSelected] = useState(points)
   
-  const randomNumber = Math.floor(Math.random() * (anecdotes.length - 0) + 0);
+  const nRandom = Math.floor(Math.random() * (anecdotes.length - 0) + 0);
 
   const handleClickRandom = () => {
       const copy = {...selected}
-      copy.anecdote = randomNumber
+      copy.anecdote = nRandom
+      console.log('Click random');
+      console.log(copy);
+      console.log('-----------');
       return setSelected(copy)
   }
 
@@ -29,14 +37,23 @@ const App = ({anecdotes}) => {
       return setSelected(copy);
   }
 
+  const mostVotes = Math.max(...Object.values(selected));
+  const anecdoteMostVotes = Object.values(selected).findIndex(n => n === mostVotes);
+  
+
+  console.log(mostVotes);
+  console.log('----------');
+  console.log(anecdoteMostVotes);
   return (
     <div>
+      <Title text={'Anecdote of the day'} />
       {anecdotes[selected.anecdote]}
-      <br />
-      <p>Has {selected[selected.anecdote]} votes</p>
-      <button onClick={handleClickVotes}>vote</button>
-      
-      <button onClick={handleClickRandom}>next anecdote</button>
+      <Votes votes={selected[selected.anecdote]} />
+      <Button text={'vote'} handleClick={handleClickVotes} />
+      <Button text={'next anecdote'} handleClick={handleClickRandom} />
+      <Title text={'Anecdote whit most votes'} />
+      {anecdotes[anecdoteMostVotes]}
+      <Votes votes={mostVotes} />
     </div>
   )
 }
