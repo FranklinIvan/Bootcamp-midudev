@@ -6,14 +6,17 @@ const Button = ({text, handleClick}) => <button onClick={handleClick}>{text}</bu
 const Votes = ({votes}) => <p>Has {votes} votes</p>
 
 const points = {
-    'anecdote': 0, // This is the initial state
+    'anecdote': 0, // This is the pointer to anecdotes
 
-    0: 1, // If it hurts, do it more often..
-    1: 2, // Adding manpower to a late software project makes it later!
-    2: 0, // ...
-    3: 0, // ...
-    4: 0, // ...
-    5: 0, // ...
+    votes: {
+      0: 0, // If it hurts, do it more often
+      1: 0, // Adding manpower to a late software project makes it later!
+      2: 0, // ...
+      3: 0, // ...
+      4: 0, // ...
+      5: 0, // ...
+    }
+    
 }
 
 const App = ({anecdotes}) => {
@@ -25,30 +28,23 @@ const App = ({anecdotes}) => {
   const handleClickRandom = () => {
       const copy = {...selected}
       copy.anecdote = nRandom
-      console.log('Click random');
-      console.log(copy);
-      console.log('-----------');
       return setSelected(copy)
   }
 
   const handleClickVotes = () => {
       const copy = {...selected}
-      copy[selected.anecdote] += 1
+      copy.votes[selected.anecdote] += 1
       return setSelected(copy);
   }
 
-  const mostVotes = Math.max(...Object.values(selected));
-  const anecdoteMostVotes = Object.values(selected).findIndex(n => n === mostVotes);
+  const mostVotes = Math.max(...Object.values(selected.votes));
+  const anecdoteMostVotes = Object.values(selected.votes).findIndex(n => n === mostVotes);
   
-
-  console.log(mostVotes);
-  console.log('----------');
-  console.log(anecdoteMostVotes);
   return (
     <div>
       <Title text={'Anecdote of the day'} />
       {anecdotes[selected.anecdote]}
-      <Votes votes={selected[selected.anecdote]} />
+      <Votes votes={selected.votes[selected.anecdote]} />
       <Button text={'vote'} handleClick={handleClickVotes} />
       <Button text={'next anecdote'} handleClick={handleClickRandom} />
       <Title text={'Anecdote whit most votes'} />
