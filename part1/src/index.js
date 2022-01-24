@@ -10,22 +10,35 @@ const Content = ({ parts = [] }) => {
   return (
     <div>
       {parts.map(part => {
-        return <p>{part.name}</p>
+        return <p key={part.id}>{part.name} {part.exercises}</p>
       })}
     </div>
   )
 }
 
-const Courses = ({courses}) => {
+const Total = ({ parts = [] }) => {
+
+  let total = 0;
+  parts.forEach(part => {
+    total += part.exercises
+  });
+
+  return <p><strong>Total of {total} exercises</strong></p>
+}
+
+const Courses = ({ courses }) => {
   return (
-    <section>
-      {courses.map(course => 
-        <Header key={course.id} name={course.name} />
-      )}
-      {courses.map(course => 
-        <Content parts={course.parts} />  
-      )}
-    </section>
+    <>
+      {courses.map(course => {
+        return (
+          <div key={course.id}>
+            <Header name={course.name} />
+            <Content parts={course.parts} />
+            <Total parts={course.parts} />
+          </div>
+        )
+      })}
+    </>
   )
 }
 
