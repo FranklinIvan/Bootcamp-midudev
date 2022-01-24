@@ -41,6 +41,7 @@ const App = () => {
   )
 }
 
+// 1.1 - 1.5.
 // const Header = ({ course }) => <h1>{course.name}</h1>
 // const Content = ({ parts }) => {
 

@@ -1,74 +1,84 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 
-const Title = ({text}) => <h1>{text}</h1>
-const Button = ({text, handleClick}) => <button onClick={handleClick}>{text}</button>
-const Votes = ({votes}) => <p>Has {votes} votes</p>
-
-const points = {
-    'anecdote': 0, // This is the pointer to anecdotes
-
-    votes: {
-      0: 0, // If it hurts, do it more often
-      1: 0, // Adding manpower to a late software project makes it later!
-      2: 0, // ...
-      3: 0, // ...
-      4: 0, // ...
-      5: 0, // ...
-    }
-    
+// 2.1.-2.5.
+const Header = ({ name }) => {
+  return <h1>{name}</h1>
 }
 
-const App = ({anecdotes}) => {
-    
-  const [selected, setSelected] = useState(points)
-  
-  const nRandom = Math.floor(Math.random() * (anecdotes.length - 0) + 0);
-
-  const handleClickRandom = () => {
-      const copy = {...selected}
-      copy.anecdote = nRandom
-      return setSelected(copy)
-  }
-
-  const handleClickVotes = () => {
-      const copy = {...selected}
-      copy.votes[selected.anecdote] += 1
-      return setSelected(copy);
-  }
-
-  const mostVotes = Math.max(...Object.values(selected.votes));
-  const anecdoteMostVotes = Object.values(selected.votes).findIndex(n => n === mostVotes);
-  
+const Content = ({ parts = [] }) => {
   return (
     <div>
-      <Title text={'Anecdote of the day'} />
-      {anecdotes[selected.anecdote]}
-      <Votes votes={selected.votes[selected.anecdote]} />
-      <Button text={'vote'} handleClick={handleClickVotes} />
-      <Button text={'next anecdote'} handleClick={handleClickRandom} />
-      <Title text={'Anecdote whit most votes'} />
-      {anecdotes[anecdoteMostVotes]}
-      <Votes votes={mostVotes} />
+      {parts.map(part => {
+        return <p>{part.name}</p>
+      })}
     </div>
   )
 }
 
-const anecdotes = [
-  'If it hurts, do it more often',
+const Courses = ({courses}) => {
+  return (
+    <section>
+      {courses.map(course => 
+        <Header key={course.id} name={course.name} />
+      )}
+      {courses.map(course => 
+        <Content parts={course.parts} />  
+      )}
+    </section>
+  )
+}
 
-  'Adding manpower to a late software project makes it later!',
+const App = () => {
+  const courses = [
+    {
+      name: 'Half Stack application development',
+      id: 1,
+      parts: [
+        {
+          name: 'Fundamentals of React',
+          exercises: 10,
+          id: 1,
+        },
+        {
+          name: 'Using props to pass data',
+          exercises: 7,
+          id: 2,
+        },
+        {
+          name: 'State of a component',
+          exercises: 14,
+          id: 3,
+        },
+        {
+          name: 'Redux',
+          exercises: 11,
+          id: 4,
+        },
+      ],
+    },
+    {
+      name: 'Node.js',
+      id: 2,
+      parts: [
+        {
+          name: 'Routing',
+          exercises: 3,
+          id: 1,
+        },
+        {
+          name: 'Middlewares',
+          exercises: 7,
+          id: 2,
+        },
+      ],
+    },
+  ]
 
-  'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
-
-  'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
-
-  'Premature optimization is the root of all evil.',
-
-  'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
-]
+  return <Courses courses={courses} />
+}
 
 ReactDOM.render(
-  <App anecdotes={anecdotes} />,
+  <App />,
   document.getElementById('root')
 )
