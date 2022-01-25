@@ -1,60 +1,40 @@
 import './App.css';
 import { useState } from 'react';
 
-// components
-const Note = ({ content, date, categories = [] }) => {
-  return (
-    <li>
-      <p>{content}</p>
-      <small><time>{date}</time></small>
-      {categories.map(category =>
-        <ul key={category}> <li>{category}</li></ul>
-      )}
-    </li>
-  )
-}
-
-export default function App(props) {
-  const [notes, setNotes] = useState(props.notes);
-  const [newNote, setNewNote] = useState('');
-  const [showAll, setShowAll] = useState(true);
+export default function App() {
+  const [ persons, setPersons ] = useState([
+    { name: 'Arto Hellas' },
+  ])
+  const [ newName, setNewName ] = useState('')
 
   const handleChange = (e) => {
-    setNewNote(e.target.value);
+    setNewName(e.target.value);
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newNoteToAddToState = {
-      id: notes.length + 1,
-      content: newNote,
-      date: new Date().toISOString(),
-      important: Math.random() < 0.5
+    const newPerson = {
+      name: newName
     }
-    console.log(newNoteToAddToState)
-    setNotes(notes.concat(newNoteToAddToState));
-    setNewNote('');
-  }
-
-  const handleShowAll = () => {
-    setShowAll(() => !showAll)
+    console.log(newPerson);
+    setPersons(persons.concat(newPerson))
   }
 
   return (
     <div>
-      <h1>Notes</h1>
-      <button onClick={handleShowAll}>{showAll ? 'show only important' : 'show all'}</button>
-      <ol>
-        {notes
-        .filter(note => showAll ? true : note.important === true)
-        .map(note =>
-          (<Note key={note.id} {...note} />)
-        )}
-      </ol>
+      <h2>Phonebook</h2>
       <form onSubmit={handleSubmit}>
-        <input type='text' onChange={handleChange} value={newNote}></input>
-        <button>Create note</button>
+        <div>
+          name: <input onChange={handleChange} value={newName} />
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
       </form>
+      <h2>Numbers</h2>
+      {persons.map(person => {
+        return <p key={person.name}>{person.name}</p>
+      })}
     </div>
   )
 }
