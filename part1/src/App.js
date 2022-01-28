@@ -4,17 +4,17 @@ import { useState } from 'react';
 // 2.6.-2.10.
 
 // components
-const Filter = ({text, handleFilter, value}) => <>{text} <input onChange={handleFilter} value={value}/> </>
+const Filter = ({ text, handleFilter, value }) => <>{text} <input onChange={handleFilter} value={value} /> </>
 
-const PersonForm = ({submit, handleChangeName, handleChangeNumber, valueName, valueNumber, txt1, txt2}) => {
+const PersonForm = ({ submit, handleChangeName, handleChangeNumber, valueName, valueNumber, txt1, txt2 }) => {
 
   return (
     <form onSubmit={submit}>
       <p>
-        {txt1} <input onChange={handleChangeName} value={valueName} required/>
+        {txt1} <input onChange={handleChangeName} value={valueName} required />
       </p>
       <p>
-        {txt2} <input onChange={handleChangeNumber} value={valueNumber} required/>
+        {txt2} <input onChange={handleChangeNumber} value={valueNumber} required />
       </p>
       <>
         <button>add</button>
@@ -23,14 +23,14 @@ const PersonForm = ({submit, handleChangeName, handleChangeNumber, valueName, va
   )
 }
 
-const Person = ({persons, filter}) => {
-  
+const Person = ({ persons, filter }) => {
+
   return (
     <>
       {
         filter.length > 0
           ? filter[0].name + ' ' + filter[0].number
-          : persons.map(person => <p key={person.name}> {person.name} {person.number}</p>) 
+          : persons.map(person => <p key={person.name}> {person.name} {person.number}</p>)
       }
     </>
   )
@@ -104,7 +104,7 @@ export default function App() {
 
       <h3>Numbers</h3>
 
-      <Person persons={persons} filter={filter}/>
+      <Person persons={persons} filter={filter} />
 
     </div>
   )
