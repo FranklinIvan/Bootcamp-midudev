@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { useState } from 'react'
 
+// Ejercico: estado complejo.
 const WarningNotUsed = () => {
   return <p>Todavía no se ha usado el contador</p>
 }

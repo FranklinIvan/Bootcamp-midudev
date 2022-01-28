@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
+// Ejercicios: 1.6.-1.14.
 const Title = ({text}) => <h1>{text}</h1>
 const Button = ({text, handleClick}) => <button onClick={handleClick}>{text}</button>
 const Votes = ({votes}) => <p>Has {votes} votes</p>

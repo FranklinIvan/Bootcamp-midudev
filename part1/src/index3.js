@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
+// Ejercicios: 1.6.-1.14.
 const NotFeedbackGiven = () => <p>No feedback given</p>
 
 const Button = ({text, handleClick}) => <button onClick={handleClick}>{text}</button>
