@@ -20,14 +20,11 @@ const LookingCountries = ({find}) => {
   )
 }
 
-const CountryData = ({ find, countries }) => {
+const CountryData = ({ find }) => {
   return (
     <div>
       {
-        find.length === Math.max(countries.length)
-        ? ''
-
-        : find.length === 1
+        find.length === 1
         ?
         <div>
           <h1>{find[0].name}</h1>
@@ -68,7 +65,11 @@ function App() {
   return (
     <div>
       <Find handleChange={handleChange} value={filter} text={'find countries'} />
-      <CountryData find={find} countries={countries} />
+      {
+        find.length === Math.max(countries.length)
+        ? ''
+        : <CountryData find={find} countries={countries} />
+      }
     </div>
   )
 }
