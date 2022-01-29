@@ -39,7 +39,7 @@ const CountryData = ({ find, handleShow }) => {
           <p>population {find[0].population}</p>
           <h3>languages</h3>
           {find[0].languages.map(l => <ul key={l.name}><li>{l.name}</li></ul>)}
-          <img src={find[0].flag} alt='' className='img' />
+          <img src={find[0].flag} alt='' className='image' />
         </div>
 
         : <LookingCountries find={find} handleShow={handleShow} />
@@ -59,16 +59,11 @@ function App() {
     })
   }, [])
 
-  const handleChange = e => {
-    setFilter(e.target.value);
-  }
+  const handleChange = e => setFilter(e.target.value)
 
-  const handleShow = (country) => {
-    return ()=> setFilter(country)
-  }
+  const handleShow = (country) => ()=> setFilter(country)
 
-  const find = countries.filter(country =>
-    country.name.toLowerCase().includes(filter.toLowerCase()))
+  const find = countries.filter(country => country.name.toLowerCase().includes(filter.toLowerCase()))
 
   // console.log(find);
 
