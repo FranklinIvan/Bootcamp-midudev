@@ -1,80 +1,58 @@
 import ReactDOM from 'react-dom'
 import './App.css';
-import { useEffect, useState } from 'react'
-import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { getAllNotes } from './services/notes/getAllNotes';
+import { createNote } from './services/notes/createNote';
 
-// Ejercicios: 2.11.-2.14.
+// Explicación: viedeo 5 - Fetching y mutación de datos
 
 // components
-const Find = ({ handleChange, value, text }) => <>{text} <input onChange={handleChange} value={value} /> <br /></>
-
-const LookingCountries = ({find, handleShow}) => {
+const Note = ({ title, body }) => {
   return (
-    <>
-      {
-        find.length > 10
-        ? 'too many matches, specify another filter'
-        : find.map(country => {
-          return (
-            <div key={country.name}>
-              <span>{country.name}</span>
-              <button onClick={handleShow(country.name)}>show</button>
-            </div>
-          )
-        })
-      }
-    </>
-  )
-}
-
-const CountryData = ({ find, handleShow }) => {
-  return (
-    <>
-      {
-        find.length === 1
-        ?
-        <div>
-          <h1>{find[0].name}</h1>
-          <p>capital {find[0].capital}</p>
-          <p>population {find[0].population}</p>
-          <h3>languages</h3>
-          {find[0].languages.map(l => <ul key={l.name}><li>{l.name}</li></ul>)}
-          <img src={find[0].flag} alt='' className='image' />
-        </div>
-
-        : <LookingCountries find={find} handleShow={handleShow} />
-      }
-    </>
+    <li>
+      <p>{title}</p>
+      <small><time>{body}</time></small>
+    </li>
   )
 }
 
 function App() {
-  const [countries, setCountries] = useState([])
-  const [filter, setFilter] = useState('')
+  const [notes, setNotes] = useState([]);
+  const [newNote, setNewNote] = useState('');
 
   useEffect(() => {
-    axios.get('https://restcountries.com/v2/all').then(json => {
-      const { data } = json
-      setCountries(data)
-    })
+    getAllNotes().then(notes => setNotes(notes))
   }, [])
 
-  const handleChange = e => setFilter(e.target.value)
+  const handleChange = e => setNewNote(e.target.value);
 
-  const handleShow = (country) => ()=> setFilter(country)
+  const handleSubmit = e => {
+    e.preventDefault();
+    const newNoteToAddToState = {
+      title: newNote,
+      body: newNote,
+      idUser: 1
+    }
+    createNote(newNoteToAddToState).then(newNote => {
+      setNotes(prev => prev.concat(newNote))
+    })
 
-  const find = countries.filter(country => country.name.toLowerCase().includes(filter.toLowerCase()))
-
-  // console.log(find);
+    setNewNote('');
+  }
 
   return (
     <div>
-      <Find handleChange={handleChange} value={filter} text={'find countries'} />
-      {
-        find.length === Math.max(countries.length)
-        ? ''
-        : <CountryData find={find} handleShow={handleShow} />
-      }
+      <h1>Notes</h1>
+      <ol>
+        {notes
+          .map(note =>
+            (<Note key={note.id} {...note} />)
+          )}
+      </ol>
+      <form onSubmit={handleSubmit}>
+        <input type='text' onChange={handleChange} value={newNote}></input>
+        <button>Create note</button>
+      </form>
     </div>
   )
 }
