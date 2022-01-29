@@ -22,7 +22,7 @@ const LookingCountries = ({find}) => {
 
 const CountryData = ({ find }) => {
   return (
-    <div>
+    <>
       {
         find.length === 1
         ?
@@ -37,7 +37,7 @@ const CountryData = ({ find }) => {
 
         : <LookingCountries find={find} />
       }
-    </div>
+    </>
   )
 }
 
