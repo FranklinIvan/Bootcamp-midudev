@@ -8,19 +8,26 @@ import axios from 'axios';
 // components
 const Find = ({ handleChange, value, text }) => <>{text} <input onChange={handleChange} value={value} /> <br /></>
 
-const LookingCountries = ({find}) => {
+const LookingCountries = ({find, handleShow}) => {
   return (
     <>
       {
         find.length > 10
         ? 'too many matches, specify another filter'
-        : find.map(country => <p key={country.name}>{country.name}</p>)
+        : find.map(country => {
+          return (
+            <div key={country.name}>
+              <span>{country.name}</span>
+              <button onClick={handleShow(country.name)}>show</button>
+            </div>
+          )
+        })
       }
     </>
   )
 }
 
-const CountryData = ({ find }) => {
+const CountryData = ({ find, handleShow }) => {
   return (
     <>
       {
@@ -35,7 +42,7 @@ const CountryData = ({ find }) => {
           <img src={find[0].flag} alt='' className='img' />
         </div>
 
-        : <LookingCountries find={find} />
+        : <LookingCountries find={find} handleShow={handleShow} />
       }
     </>
   )
@@ -56,11 +63,14 @@ function App() {
     setFilter(e.target.value);
   }
 
+  const handleShow = (country) => {
+    return ()=> setFilter(country)
+  }
+
   const find = countries.filter(country =>
     country.name.toLowerCase().includes(filter.toLowerCase()))
 
-  console.log(find);
-
+  // console.log(find);
 
   return (
     <div>
@@ -68,7 +78,7 @@ function App() {
       {
         find.length === Math.max(countries.length)
         ? ''
-        : <CountryData find={find} countries={countries} />
+        : <CountryData find={find} handleShow={handleShow} />
       }
     </div>
   )
