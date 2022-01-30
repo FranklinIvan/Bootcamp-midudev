@@ -83,5 +83,12 @@ app.delete('/api/notes/:id', (req, res) => {
   res.status(204).end()
 })
 
+app.use((req, res) => {
+  res.status(404).json({
+    error: true,
+    message: 'Not found'
+  })
+})
+
 const PORT = 3001
 app.listen(PORT, () => console.log('Server on port', PORT))
