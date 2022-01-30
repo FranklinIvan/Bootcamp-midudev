@@ -28,6 +28,17 @@ app.get('/', (req, res) => {
     res.send('<h1>hi there</h1>')
 })
 
+app.get('/info', (req,res) => {
+   
+    const info = `Phonebook has info for ${notes.length} people`
+    const date = new Date().toISOString();
+
+    console.log(info);
+    console.log(date);
+
+    res.send(`${info} <br> ${date}`)
+})
+
 app.get('/api/notes', (req, res) => {
     if (notes) res.json(notes)
     else res.status(404).end()
