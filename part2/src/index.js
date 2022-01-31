@@ -45,11 +45,10 @@ function App() {
       important: Math.random() < 0.5
     }
 
-    setNotes(notes.concat(newNoteToAddToState))
+    noteService.create(newNoteToAddToState)
+      .then(newNote => setNotes(prevNotes => prevNotes.concat(newNote)))
     setNewNote('');
   }
-
-  const handleShow = () => setShowAll(prev => !prev)
 
   const toggleImportanceOf = (id) => {
     const note = notes.find(n => n.id === id)
@@ -63,6 +62,7 @@ function App() {
     }
   }
 
+  const handleShow = () => setShowAll(prev => !prev)
   const notesToShow = showAll ? notes : notes.filter(n => n.important === true)
 
   return (
