@@ -30,16 +30,6 @@ app.get('/', (req, res) => {
   res.send('<h1>hi there</h1>')
 })
 
-app.get('/info', (req, res) => {
-  const info = `Phonebook has info for ${notes.length} people`
-  const date = new Date().toISOString()
-
-  console.log(info)
-  console.log(date)
-
-  res.send(`${info} <br> ${date}`)
-})
-
 app.get('/api/notes', (req, res) => {
   if (notes) res.json(notes)
   else res.status(404).end()
@@ -77,6 +67,18 @@ app.post('/api/notes', (req, res) => {
 
   if (newNote) res.status(201).json(newNote)
   else res.status(404).end()
+})
+
+app.put('/api/notes/:id', (req, res) => {
+  const id = Number(req.params.id)
+
+  const note = notes.find(n => n.id === id)
+  const changedNote = { ...note, important: !note.important }
+
+  notes = notes.map(note => note.id !== id ? note : changedNote)
+
+  if (changedNote) res.json(changedNote)
+  else res.status(400).end()
 })
 
 app.delete('/api/notes/:id', (req, res) => {
