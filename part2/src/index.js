@@ -2,8 +2,6 @@
 import ReactDOM from 'react-dom'
 import './App.css';
 import { useEffect, useState } from 'react';
-// import { getAllNotes } from './services/notes/getAllNotes';
-// import { createNote } from './services/notes/createNote';
 import noteService from './services/notes';
 
 // components
@@ -48,10 +46,6 @@ function App() {
     }
 
     setNotes(notes.concat(newNoteToAddToState))
-    // createNote(newNoteToAddToState).then(newNote => {
-    //   setNotes(prev => prev.concat(newNote))
-    // })
-
     setNewNote('');
   }
 
@@ -62,12 +56,9 @@ function App() {
     const changedNote = { ...note, important: !note.important }
 
     return () => {
-      console.log(note.important);
-      console.log(changedNote.important);
       noteService.update(id, changedNote)
         .then(returnedNote => {
-          console.log(returnedNote);
-          // setNotes(notes.map(n => n.id !== id ? note : returnedNote))
+          setNotes(notes.map(note => note.id !== id ? note : returnedNote))
         })
     }
   }
