@@ -1,6 +1,9 @@
+require('dotenv').config()
+require('./src/database/mongo')
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const Note = require('./src/models/Note')
 
 app.use(express.json())
 app.use(cors())
@@ -31,8 +34,9 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/notes', (req, res) => {
-  if (notes) res.json(notes)
-  else res.status(404).end()
+  Note.find({})
+    .then(result => res.json(result))
+    .catch(error => console.error(error))
 })
 
 app.get('/api/notes/:id', (req, res) => {
