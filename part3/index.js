@@ -29,7 +29,7 @@ app.get('/api/notes/:id', (req, res, next) => {
   Note.findById(id)
     .then(note => {
       if (note) return res.json(note)
-      else res.status(404).end()
+      res.status(404).end()
     })
     .catch(error => next(error))
 })
@@ -59,15 +59,10 @@ app.put('/api/notes/:id', (req, res, next) => {
   const { id } = req.params
   const { body } = req
 
-  // const newNoteInfo = {
-  //   content: body.content,
-  //   important: body.important
-  // }
-
   Note.findByIdAndUpdate(id, body, { new: true })
     .then(changedNote => {
       if (changedNote) return res.json(changedNote)
-      else res.status(404).end()
+      res.status(404).end()
     })
     .catch(error => next(error))
 })
@@ -75,10 +70,10 @@ app.put('/api/notes/:id', (req, res, next) => {
 app.delete('/api/notes/:id', (req, res, next) => {
   const { id } = req.params
 
-  Note.findByIdAndRemove(id)
+  Note.findByIdAndDelete(id)
     .then(note => {
       if (note) return res.status(204).end()
-      else res.status(404).end()
+      res.status(404).end()
     })
     .catch(error => next(error))
 })
