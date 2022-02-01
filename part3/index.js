@@ -42,7 +42,7 @@ app.get('/api/notes', (req, res) => {
     })
 })
 
-app.get('/api/notes/:id', (req, res) => {
+app.get('/api/notes/:id', (req, res, next) => {
   const { id } = req.params
 
   Note.findById(id)
@@ -50,10 +50,7 @@ app.get('/api/notes/:id', (req, res) => {
       if (note) return res.json(note)
       else res.status(404).end()
     })
-    .catch(error => {
-      console.error(error)
-      res.status(400).end()
-    })
+    .catch(error => next(error))
 })
 
 app.post('/api/notes', (req, res) => {
@@ -107,11 +104,9 @@ app.delete('/api/notes/:id', (req, res) => {
     })
 })
 
-app.use((req, res) => {
-  res.status(404).json({
-    error: true,
-    message: 'Not found'
-  })
+app.use((error, req, res, next) => {
+  if (error.name === 'CastError') res.status(400).end()
+  else res.status(500).end()
 })
 
 const PORT = 3001
