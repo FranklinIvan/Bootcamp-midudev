@@ -40,7 +40,7 @@ function App() {
     e.preventDefault();
 
     const newNoteToAddToState = {
-      id: notes.length + 1,
+      // id: notes.length + 1,
       content: newNote,
       important: Math.random() < 0.5
     }
