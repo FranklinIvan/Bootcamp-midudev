@@ -35,13 +35,10 @@ app.get('/', (req, res) => {
 
 app.get('/api/notes', (req, res) => {
   Note.find({})
-    .then(result => res.json(result))
+    .then(notes => res.json(notes))
     .catch(error => {
       console.error(error)
-      res.status(404).json({
-        error: true,
-        message: 'not found'
-      })
+      res.status(404).end()
     })
 })
 
@@ -49,13 +46,13 @@ app.get('/api/notes/:id', (req, res) => {
   const { id } = req.params
 
   Note.findById(id)
-    .then(note => res.json(note))
+    .then(note => {
+      if (note) return res.json(note)
+      else res.status(404).end()
+    })
     .catch(error => {
       console.error(error)
-      res.status(404).json({
-        error: true,
-        message: 'not found'
-      })
+      res.status(400).end()
     })
 })
 
@@ -94,17 +91,19 @@ app.put('/api/notes/:id', (req, res) => {
 
 app.delete('/api/notes/:id', (req, res) => {
   const { id } = req.params
+
   Note.findByIdAndDelete(id)
-    .then(note => res.json({
-      message: 'successfully removed',
-      note
-    }))
+    .then(note => {
+      if (note) {
+        return res.json({
+          message: 'successfully removed',
+          note
+        })
+      } else res.status(404).end()
+    })
     .catch(error => {
       console.error(error)
-      res.status(404).json({
-        error: true,
-        message: 'not found'
-      })
+      res.status(400).end()
     })
 })
 
