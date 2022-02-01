@@ -5,4 +5,4 @@ const URI = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.
 
 connect(URI)
   .then(() => console.log('database connected'))
-  .catch(error => console.log(error))
+  .catch(error => console.error(error))

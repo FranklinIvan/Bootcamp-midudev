@@ -40,11 +40,17 @@ app.get('/api/notes', (req, res) => {
 })
 
 app.get('/api/notes/:id', (req, res) => {
-  const id = Number(req.params.id)
-  const note = notes.find(note => note.id === id)
+  const { id } = req.params
 
-  if (note) res.json(note)
-  else res.status(404).end()
+  Note.findById(id)
+    .then(note => res.json(note))
+    .catch(error => {
+      console.error(error)
+      res.status(404).json({
+        error: true,
+        message: 'not found'
+      })
+    })
 })
 
 app.post('/api/notes', (req, res) => {
@@ -57,20 +63,15 @@ app.post('/api/notes', (req, res) => {
     })
   }
 
-  const ids = notes.map(note => note.id)
-  const maxId = Math.max(...ids)
-
-  const newNote = {
-    id: maxId + 1,
+  const newNote = new Note({
     content: body.content,
     important: typeof body.important !== 'undefined' ? body.important : false,
     date: new Date().toISOString()
-  }
+  })
 
-  notes = notes.concat(newNote)
-
-  if (newNote) res.status(201).json(newNote)
-  else res.status(404).end()
+  newNote.save()
+    .then(result => res.status(201).json(result))
+    .catch(error => console.error(error))
 })
 
 app.put('/api/notes/:id', (req, res) => {
