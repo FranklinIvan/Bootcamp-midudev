@@ -4,33 +4,14 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const Note = require('./src/models/Note')
+const notFound = require('./src/middlewares/notFound')
+const handleErrors = require('./src/middlewares/handleErrors')
 
 app.use(express.json())
 app.use(cors())
 
-let notes = [
-  {
-    id: 1,
-    content: 'HTML is easy',
-    date: '2019-05-30T17:30:31.098Z',
-    important: true
-  },
-  {
-    id: 2,
-    content: 'Browser can execute only JavaScript',
-    date: '2019-05-30T18:39:34.091Z',
-    important: false
-  },
-  {
-    id: 3,
-    content: 'GET and POST are the most important methods of HTTP protocol',
-    date: '2019-05-30T19:20:14.298Z',
-    important: true
-  }
-]
-
 app.get('/', (req, res) => {
-  res.send('<h1>hi there</h1>')
+  res.send('<h2>Hi there</h2>')
 })
 
 app.get('/api/notes', (req, res) => {
@@ -74,40 +55,39 @@ app.post('/api/notes', (req, res) => {
     .catch(error => console.error(error))
 })
 
-app.put('/api/notes/:id', (req, res) => {
-  const id = Number(req.params.id)
+app.put('/api/notes/:id', (req, res, next) => {
+  const { id } = req.params
+  const { body } = req
 
-  const note = notes.find(n => n.id === id)
-  const changedNote = { ...note, important: !note.important }
+  // const newNoteInfo = {
+  //   content: body.content,
+  //   important: body.important
+  // }
 
-  notes = notes.map(note => note.id !== id ? note : changedNote)
-
-  if (changedNote) res.json(changedNote)
-  else res.status(400).end()
+  Note.findByIdAndUpdate(id, body, { new: true })
+    .then(changedNote => {
+      if (changedNote) return res.json(changedNote)
+      else res.status(404).end()
+    })
+    .catch(error => next(error))
 })
 
-app.delete('/api/notes/:id', (req, res) => {
+app.delete('/api/notes/:id', (req, res, next) => {
   const { id } = req.params
 
-  Note.findByIdAndDelete(id)
+  Note.findByIdAndRemove(id)
     .then(note => {
-      if (note) {
-        return res.json({
-          message: 'successfully removed',
-          note
-        })
-      } else res.status(404).end()
+      if (note) return res.status(204).end()
+      else res.status(404).end()
     })
-    .catch(error => {
-      console.error(error)
-      res.status(400).end()
-    })
+    .catch(error => next(error))
 })
 
-app.use((error, req, res, next) => {
-  if (error.name === 'CastError') res.status(400).end()
-  else res.status(500).end()
-})
+// 404
+app.use(notFound)
+
+// handle error
+app.use(handleErrors)
 
 const PORT = 3001
 app.listen(PORT, () => console.log('Server on port', PORT))
