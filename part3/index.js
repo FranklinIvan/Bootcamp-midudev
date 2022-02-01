@@ -36,7 +36,13 @@ app.get('/', (req, res) => {
 app.get('/api/notes', (req, res) => {
   Note.find({})
     .then(result => res.json(result))
-    .catch(error => console.error(error))
+    .catch(error => {
+      console.error(error)
+      res.status(404).json({
+        error: true,
+        message: 'not found'
+      })
+    })
 })
 
 app.get('/api/notes/:id', (req, res) => {
@@ -54,7 +60,7 @@ app.get('/api/notes/:id', (req, res) => {
 })
 
 app.post('/api/notes', (req, res) => {
-  const body = req.body
+  const { body } = req
 
   if (!body || !body.content) {
     return res.status(400).json({
@@ -87,9 +93,19 @@ app.put('/api/notes/:id', (req, res) => {
 })
 
 app.delete('/api/notes/:id', (req, res) => {
-  const id = Number(req.params.id)
-  notes = notes.filter(note => note.id !== id)
-  res.status(204).end()
+  const { id } = req.params
+  Note.findByIdAndDelete(id)
+    .then(note => res.json({
+      message: 'successfully removed',
+      note
+    }))
+    .catch(error => {
+      console.error(error)
+      res.status(404).json({
+        error: true,
+        message: 'not found'
+      })
+    })
 })
 
 app.use((req, res) => {
