@@ -1,7 +1,7 @@
 const Note = require('../src/models/Note')
 const { connection } = require('mongoose')
 const { server } = require('../index')
-const { api, initialNotes, getAllNotesContents } = require('./helpers')
+const { api, initialNotes, getAllContentFromNotes } = require('./helpers')
 
 beforeEach(async () => {
   await Note.deleteMany({})
@@ -26,7 +26,7 @@ test('there are 2 notes', async () => {
 })
 
 test('the first note is about midudev', async () => {
-  const { contents } = await getAllNotesContents()
+  const { contents } = await getAllContentFromNotes()
 
   expect(contents).toContain('Learning FullStack w/ midudev')
 })
@@ -43,7 +43,7 @@ test('a valid note added', async () => {
     .expect(201)
     .expect('Content-type', /application\/json/)
 
-  const { contents, response } = await getAllNotesContents()
+  const { contents, response } = await getAllContentFromNotes()
 
   expect(contents).toContain(newNote.content)
   expect(response.body).toHaveLength(initialNotes.length + 1)
