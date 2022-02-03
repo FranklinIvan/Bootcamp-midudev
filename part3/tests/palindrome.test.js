@@ -1,6 +1,6 @@
 const { palindrome } = require('../utils/for_testing')
 
-describe('palindrome', () => {
+describe.skip('palindrome', () => {
   test('of franklin', () => {
     const result = palindrome('franklin')
     expect(result).toBe('nilknarf')

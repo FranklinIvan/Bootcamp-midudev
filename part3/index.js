@@ -84,5 +84,7 @@ app.use(notFound)
 // handle error
 app.use(handleErrors)
 
-const PORT = 3001
-app.listen(PORT, () => console.log('Server on port', PORT))
+const PORT = process.env.PORT || 3001
+const server = app.listen(PORT, () => console.log('Server on port', PORT))
+
+module.exports = { app, server }
