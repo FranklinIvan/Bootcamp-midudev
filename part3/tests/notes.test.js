@@ -1,7 +1,12 @@
 const Note = require('../src/models/Note')
 const { connection } = require('mongoose')
 const { server } = require('../index')
-const { api, initialNotes, getAllContentFromNotes } = require('./helpers')
+const {
+  api,
+  initialNotes,
+  getAllNotes,
+  getAllInfoFromNotes
+} = require('./helpers')
 
 beforeEach(async () => {
   await Note.deleteMany({})
@@ -21,16 +26,17 @@ test('notes are returned as json', async () => {
 })
 
 test('there are 2 notes', async () => {
-  const response = await api.get('/api/notes')
+  const response = await getAllNotes()
   expect(response.body).toHaveLength(initialNotes.length)
 })
 
 test('the first note is about midudev', async () => {
-  const { contents } = await getAllContentFromNotes()
+  const { contents } = await getAllInfoFromNotes()
 
   expect(contents).toContain('Learning FullStack w/ midudev')
 })
 
+// post
 test('a valid note added', async () => {
   const newNote = {
     content: 'async await',
@@ -43,10 +49,24 @@ test('a valid note added', async () => {
     .expect(201)
     .expect('Content-type', /application\/json/)
 
-  const { contents, response } = await getAllContentFromNotes()
+  const { contents } = await getAllInfoFromNotes()
+  const response = await getAllNotes()
 
   expect(contents).toContain(newNote.content)
   expect(response.body).toHaveLength(initialNotes.length + 1)
+})
+
+// delete
+test('delete a note', async () => {
+  const { ids } = await getAllInfoFromNotes()
+  const nRandom = Math.round(Math.random() * 1)
+
+  await api
+    .delete(`/api/notes/${ids[nRandom]}`)
+    .expect(204)
+
+  const response = await getAllNotes()
+  expect(response.body).toHaveLength(initialNotes.length - 1)
 })
 
 test('a note w/out content is not added', async () => {
@@ -59,7 +79,7 @@ test('a note w/out content is not added', async () => {
     .send(newNote)
     .expect(400)
 
-  const response = await api.get('/api/notes')
+  const response = await getAllNotes()
   expect(response.body).toHaveLength(initialNotes.length)
 })
 
