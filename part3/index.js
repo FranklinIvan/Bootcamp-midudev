@@ -58,10 +58,7 @@ app.post('/api/notes', (req, res) => {
 app.put('/api/notes/:id', (req, res, next) => {
   const { id } = req.params
   const { body } = req
-  const { content } = body
-  const { important } = body
-
-  console.log('backend', content)
+  const { content, important } = body
 
   if (Object.keys(body).length === 0) return res.status(400).end()
   if (content !== undefined) {
