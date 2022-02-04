@@ -18,26 +18,26 @@ beforeEach(async () => {
   await note2.save()
 })
 
-test('notes are returned as json', async () => {
+test.skip('notes are returned as json', async () => {
   await api
     .get('/api/notes')
     .expect(200)
     .expect('Content-type', /application\/json/)
 })
 
-test('there are 2 notes', async () => {
+test.skip('there are 2 notes', async () => {
   const response = await getAllNotes()
   expect(response.body).toHaveLength(initialNotes.length)
 })
 
-test('the first note is about midudev', async () => {
+test.skip('the first note is about midudev', async () => {
   const { contents } = await getAllInfoFromNotes()
 
   expect(contents).toContain('Learning FullStack w/ midudev')
 })
 
 // post
-test('a valid note added', async () => {
+test.skip('a valid note added', async () => {
   const newNote = {
     content: 'async await',
     important: false
@@ -57,7 +57,7 @@ test('a valid note added', async () => {
 })
 
 // delete
-test('delete a random note', async () => {
+test.skip('delete a random note', async () => {
   const { ids } = await getAllInfoFromNotes()
   const nRandom = Math.round(Math.random() * 1)
 
@@ -67,6 +67,16 @@ test('delete a random note', async () => {
 
   const response = await getAllNotes()
   expect(response.body).toHaveLength(initialNotes.length - 1)
+})
+
+// failed delete. Entry to CastError (handleErrors)
+test.skip('try to delete a note w/out id', async () => {
+  await api
+    .delete('/api/notes/}')
+    .expect(400)
+
+  const response = await getAllNotes()
+  expect(response.body).toHaveLength(initialNotes.length)
 })
 
 // put
@@ -91,9 +101,29 @@ test.skip('modify the content of a note', async () => {
 })
 
 // failed put
-test('modify the content of a note w/out content', async () => {
+test.skip('modify the content/important of a note w/ undefined fields', async () => {
   const newNote = {
-    important: false
+    important: undefined,
+    content: undefined
+  }
+
+  const { ids, contents: x } = await getAllInfoFromNotes()
+  console.log(x)
+
+  await api
+    .put(`/api/notes/${ids[0]}`)
+    .send(newNote)
+    .expect(400)
+
+  const { contents } = await getAllInfoFromNotes()
+  console.log(contents)
+})
+
+// failed put
+test('modify the content/important of a note w/ null fields', async () => {
+  const newNote = {
+    content: false,
+    important: true
   }
 
   const { ids, contents: x } = await getAllInfoFromNotes()
@@ -109,7 +139,7 @@ test('modify the content of a note w/out content', async () => {
 })
 
 // failed post
-test('a note w/out content is not added', async () => {
+test.skip('a note w/out content is not added', async () => {
   const newNote = {
     important: true
   }

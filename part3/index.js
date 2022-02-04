@@ -40,7 +40,7 @@ app.post('/api/notes', (req, res) => {
   if (!body || !body.content) {
     return res.status(400).json({
       error: true,
-      message: 'no note, check and try again'
+      message: 'no content, check and try again'
     })
   }
 
@@ -60,6 +60,8 @@ app.put('/api/notes/:id', (req, res, next) => {
   const { body } = req
 
   console.log('desde el backend', { body })
+
+  // Tengo que seguir valindando, lo del testing es una locura
 
   if (Object.keys(body).length === 0) return res.status(400).end()
   if (body.content && !body.content) return res.status(400).end()
