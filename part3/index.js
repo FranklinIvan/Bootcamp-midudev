@@ -36,8 +36,9 @@ app.get('/api/notes/:id', (req, res, next) => {
 
 app.post('/api/notes', (req, res) => {
   const { body } = req
+  const { content, important } = body
 
-  if (!body || !body.content) {
+  if (!body || !content) {
     return res.status(400).json({
       error: true,
       message: 'no content, check and try again'
@@ -45,8 +46,8 @@ app.post('/api/notes', (req, res) => {
   }
 
   const newNote = new Note({
-    content: body.content,
-    important: typeof body.important !== 'undefined' ? body.important : false,
+    content,
+    important: typeof important !== 'undefined' ? important : false,
     date: new Date().toISOString()
   })
 
@@ -60,10 +61,8 @@ app.put('/api/notes/:id', (req, res, next) => {
   const { body } = req
   const { content, important } = body
 
-  if (Object.keys(body).length === 0) return res.status(400).end()
-  if (content !== undefined) {
-    if (content === '' || content === null) return res.status(400).end()
-  }
+  if (!body || Object.keys(body).length === 0) return res.status(400).end()
+  if (content !== undefined && (content === '' || content === null)) res.status(400).end()
   if (important !== undefined && !important) return res.status(400).end()
 
   Note.findByIdAndUpdate(id, body, { new: true })
