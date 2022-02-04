@@ -70,7 +70,7 @@ test('delete a random note', async () => {
 })
 
 // put
-test('modify the content of a note', async () => {
+test.skip('modify the content of a note', async () => {
   const newNoteInfo = {
     content: 'new content of a note'
   }
@@ -87,6 +87,24 @@ test('modify the content of a note', async () => {
 
   expect(contents).toContain(newNoteInfo.content)
   expect(response.body).toHaveLength(initialNotes.length)
+  console.log(contents)
+})
+
+// failed put
+test('modify the content of a note w/out content', async () => {
+  const newNote = {
+    important: false
+  }
+
+  const { ids, contents: x } = await getAllInfoFromNotes()
+  console.log(x)
+
+  await api
+    .put(`/api/notes/${ids[0]}`)
+    .send(newNote)
+    .expect(400)
+
+  const { contents } = await getAllInfoFromNotes()
   console.log(contents)
 })
 

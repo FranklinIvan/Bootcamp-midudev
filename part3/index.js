@@ -59,6 +59,12 @@ app.put('/api/notes/:id', (req, res, next) => {
   const { id } = req.params
   const { body } = req
 
+  console.log('desde el backend', { body })
+
+  if (Object.keys(body).length === 0) return res.status(400).end()
+  if (body.content && !body.content) return res.status(400).end()
+  if (body.important && !body.important) return res.status(400).end()
+
   Note.findByIdAndUpdate(id, body, { new: true })
     .then(changedNote => {
       if (changedNote) return res.json(changedNote)
