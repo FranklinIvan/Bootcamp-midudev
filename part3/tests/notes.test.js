@@ -80,7 +80,7 @@ test.skip('try to delete a note w/out id', async () => {
 })
 
 // put
-test.skip('modify the content of a note', async () => {
+test('modify the content of a note', async () => {
   const newNoteInfo = {
     content: 'new content of a note'
   }
@@ -97,37 +97,31 @@ test.skip('modify the content of a note', async () => {
 
   expect(contents).toContain(newNoteInfo.content)
   expect(response.body).toHaveLength(initialNotes.length)
-  console.log(contents)
 })
 
 // failed put
-test.skip('modify the content/important of a note w/ undefined fields', async () => {
+test('modify the content/important of a note w/ undefined fields', async () => {
   const newNote = {
     important: undefined,
     content: undefined
   }
 
-  const { ids, contents: x } = await getAllInfoFromNotes()
-  console.log(x)
+  const { ids } = await getAllInfoFromNotes()
 
   await api
     .put(`/api/notes/${ids[0]}`)
     .send(newNote)
     .expect(400)
-
-  const { contents } = await getAllInfoFromNotes()
-  console.log(contents)
 })
 
 // failed put
 test('modify the content/important of a note w/ null fields', async () => {
   const newNote = {
-    content: false,
-    important: true
+    content: null,
+    important: null
   }
 
-  const { ids, contents: x } = await getAllInfoFromNotes()
-  console.log(x)
+  const { ids } = await getAllInfoFromNotes()
 
   await api
     .put(`/api/notes/${ids[0]}`)

@@ -58,14 +58,16 @@ app.post('/api/notes', (req, res) => {
 app.put('/api/notes/:id', (req, res, next) => {
   const { id } = req.params
   const { body } = req
+  const { content } = body
+  const { important } = body
 
-  console.log('desde el backend', { body })
-
-  // Tengo que seguir valindando, lo del testing es una locura
+  console.log('backend', content)
 
   if (Object.keys(body).length === 0) return res.status(400).end()
-  if (body.content && !body.content) return res.status(400).end()
-  if (body.important && !body.important) return res.status(400).end()
+  if (content !== undefined) {
+    if (content === '' || content === null) return res.status(400).end()
+  }
+  if (important !== undefined && !important) return res.status(400).end()
 
   Note.findByIdAndUpdate(id, body, { new: true })
     .then(changedNote => {
