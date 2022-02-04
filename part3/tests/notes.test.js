@@ -57,7 +57,7 @@ test('a valid note added', async () => {
 })
 
 // delete
-test('delete a note', async () => {
+test('delete a random note', async () => {
   const { ids } = await getAllInfoFromNotes()
   const nRandom = Math.round(Math.random() * 1)
 
@@ -69,6 +69,28 @@ test('delete a note', async () => {
   expect(response.body).toHaveLength(initialNotes.length - 1)
 })
 
+// put
+test('modify the content of a note', async () => {
+  const newNoteInfo = {
+    content: 'new content of a note'
+  }
+  const { ids } = await getAllInfoFromNotes()
+
+  await api
+    .put(`/api/notes/${ids[0]}`)
+    .send(newNoteInfo)
+    .expect(200)
+    .expect('Content-type', /application\/json/)
+
+  const response = await getAllNotes()
+  const { contents } = await getAllInfoFromNotes()
+
+  expect(contents).toContain(newNoteInfo.content)
+  expect(response.body).toHaveLength(initialNotes.length)
+  console.log(contents)
+})
+
+// failed post
 test('a note w/out content is not added', async () => {
   const newNote = {
     important: true
