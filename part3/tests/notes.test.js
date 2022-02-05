@@ -27,14 +27,14 @@ describe('RANDOM', () => {
   })
 
   test('there are 2 notes', async () => {
-    const response = await getAllNotes()
-    expect(response.body).toHaveLength(initialNotes.length)
+    const { body } = await getAllNotes()
+    expect(body).toHaveLength(initialNotes.length)
   })
 
   test('the first note is about midudev', async () => {
     const { contents } = await getAllInfoFromNotes()
 
-    expect(contents).toContain('Learning FullStack w/ midudev')
+    expect(contents).toContain(initialNotes[0].content)
   })
 })
 
@@ -52,10 +52,10 @@ describe('POST', () => {
       .expect('Content-type', /application\/json/)
 
     const { contents } = await getAllInfoFromNotes()
-    const response = await getAllNotes()
+    const { body } = await getAllNotes()
 
     expect(contents).toContain(newNote.content)
-    expect(response.body).toHaveLength(initialNotes.length + 1)
+    expect(body).toHaveLength(initialNotes.length + 1)
   })
 
   test('a note w/out content is not added', async () => {
@@ -68,8 +68,25 @@ describe('POST', () => {
       .send(newNote)
       .expect(400)
 
-    const response = await getAllNotes()
-    expect(response.body).toHaveLength(initialNotes.length)
+    const { body } = await getAllNotes()
+    expect(body).toHaveLength(initialNotes.length)
+  })
+
+  test('a note w/out important is added correctly', async () => {
+    const newNote = {
+      content: 'This is a new note with a important default'
+    }
+
+    await api
+      .post('/api/notes')
+      .send(newNote)
+      .expect(201)
+      .expect('Content-type', /application\/json/)
+
+    const { body } = await getAllNotes()
+    const { contents } = await getAllInfoFromNotes()
+    expect(body).toHaveLength(initialNotes.length + 1)
+    expect(contents).toContain(newNote.content)
   })
 })
 
@@ -86,14 +103,26 @@ describe('DELETE', () => {
     expect(response.body).toHaveLength(initialNotes.length - 1)
   })
 
+  test('delete the first note added', async () => {
+    const { body: firtsNotes } = await getAllNotes()
+
+    await api
+      .delete(`/api/notes/${firtsNotes[0].id}`)
+      .expect(204)
+
+    const { body: secondNotes } = await getAllNotes()
+    expect(secondNotes).toHaveLength(initialNotes.length - 1)
+    expect(secondNotes).not.toContain(firtsNotes[0].content)
+  })
+
   // failed delete. Entry to CastError (handleErrors)
   test.skip('try to delete a note w/out id', async () => {
     await api
       .delete('/api/notes/}')
       .expect(400)
 
-    const response = await getAllNotes()
-    expect(response.body).toHaveLength(initialNotes.length)
+    const { body } = await getAllNotes()
+    expect(body).toHaveLength(initialNotes.length)
   })
 })
 
@@ -110,11 +139,11 @@ describe('PUT', () => {
       .expect(200)
       .expect('Content-type', /application\/json/)
 
-    const response = await getAllNotes()
+    const { body: notes } = await getAllNotes()
     const { contents } = await getAllInfoFromNotes()
 
     expect(contents).toContain(newNoteInfo.content)
-    expect(response.body).toHaveLength(initialNotes.length)
+    expect(notes).toHaveLength(initialNotes.length)
   })
 
   test('modify the content/important of a note w/ undefined fields', async () => {
@@ -132,17 +161,20 @@ describe('PUT', () => {
   })
 
   test('modify the content/important of a note w/ null fields', async () => {
-    const newNote = {}
+    const newNote = {
+      content: null,
+      important: null
+    }
 
-    const { ids } = await getAllInfoFromNotes()
+    const { body: notes } = await getAllNotes()
 
     await api
-      .put(`/api/notes/${ids[0]}`)
+      .put(`/api/notes/${notes[0].id}`)
       .send(newNote)
       .expect(400)
 
     const { contents } = await getAllInfoFromNotes()
-    console.log(contents)
+    expect(contents).not.toContain(newNote.content)
   })
 })
 

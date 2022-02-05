@@ -3,7 +3,7 @@ module.exports = (error, req, res, next) => {
   if (error.name === 'CastError') {
     res.status(400).json({
       error: true,
-      message: 'id used is malformed'
+      message: 'information used is malformed'
     })
   } else res.status(500).end()
 }
