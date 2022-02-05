@@ -14,13 +14,15 @@ app.get('/', (req, res) => {
   res.send('<h2>Hi there</h2>')
 })
 
-app.get('/api/notes', (req, res) => {
-  Note.find({})
-    .then(notes => res.json(notes))
-    .catch(error => {
-      console.error(error)
-      res.status(404).end()
-    })
+app.get('/api/notes', async (req, res) => {
+  const notes = await Note.find({})
+
+  try {
+    res.json(notes)
+  } catch (error) {
+    console.error(error)
+    res.status(404).end()
+  }
 })
 
 app.get('/api/notes/:id', (req, res, next) => {
