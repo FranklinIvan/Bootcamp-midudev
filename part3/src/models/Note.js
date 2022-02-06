@@ -9,6 +9,10 @@ const noteSchema = new Schema({
   },
   important: {
     type: Boolean
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
   }
 })
 
