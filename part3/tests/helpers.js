@@ -2,6 +2,7 @@ const supertest = require('supertest')
 const { app } = require('../index')
 const api = supertest(app)
 
+// notes
 const initialNotes = [
   {
     content: 'Learning FullStack w/ midudev',
@@ -21,18 +22,25 @@ const getAllNotes = async () => {
 }
 
 const getAllInfoFromNotes = async () => {
-  const response = await getAllNotes()
-  const ids = response.body.map(note => note.id)
-  const contents = response.body.map(note => note.content)
+  const { body } = await getAllNotes()
+  const ids = body.map(note => note.id)
+  const contents = body.map(note => note.content)
   return {
     ids,
     contents
   }
 }
 
+// users
+const getAllUsers = async () => {
+  const response = await api.get('/api/users')
+  return response
+}
+
 module.exports = {
   api,
   initialNotes,
   getAllNotes,
-  getAllInfoFromNotes
+  getAllInfoFromNotes,
+  getAllUsers
 }

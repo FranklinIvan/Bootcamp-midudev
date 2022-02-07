@@ -1,8 +1,11 @@
 const bcrypt = require('bcrypt')
 const User = require('../src/models/User')
-const { api } = require('./helpers')
 const { connection } = require('mongoose')
 const { server } = require('../index')
+const {
+  api,
+  getAllUsers
+} = require('./helpers')
 
 beforeEach(async () => {
   await User.deleteMany({})
@@ -29,7 +32,7 @@ describe('RANDOM', () => {
 
 describe('POST', () => {
   test('a valid user added', async () => {
-    const firstUsers = await User.find({})
+    const { body: firstUsers } = await getAllUsers()
     const newUser = {
       username: 'frank',
       name: 'franklin',
@@ -42,22 +45,27 @@ describe('POST', () => {
       .expect(201)
       .expect('Content-type', /application\/json/)
 
-    const lastUsers = await User.find({})
+    const { body: lastUsers } = await getAllUsers()
     expect(lastUsers).toHaveLength(firstUsers.length + 1)
     const usernames = lastUsers.map(user => user.username)
     expect(usernames).toContain(newUser.username)
   })
 
   test('a invalid user w/out content is not added', async () => {
+    const { body: firstUsers } = await getAllUsers()
     const newUser = {}
 
     await api
       .post('/api/users')
       .send(newUser)
       .expect(400)
+
+    const { body: lastUsers } = await getAllUsers()
+    expect(lastUsers).toHaveLength(firstUsers.length)
   })
 
   test('a user w/out password is not added', async () => {
+    const { body: firstUsers } = await getAllUsers()
     const newUser = {
       username: 'frank',
       name: 'franklin'
@@ -67,6 +75,9 @@ describe('POST', () => {
       .post('/api/users')
       .send(newUser)
       .expect(400)
+
+    const { body: lastUsers } = await getAllUsers()
+    expect(lastUsers).toHaveLength(firstUsers.length)
   })
 
   test('a user w/out username is not added', async () => {
