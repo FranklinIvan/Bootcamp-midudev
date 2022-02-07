@@ -117,6 +117,24 @@ describe('POST', () => {
       .send(newUser)
       .expect(400)
   })
+
+  test('fails when trying to insert a user that was already taken', async () => {
+    const { body: firstUsers } = await getAllUsers()
+    const newUser = {
+      username: 'midudev',
+      name: 'midu',
+      password: 123
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-type', /application\/json/)
+
+    const { body: lastUsers } = await getAllUsers()
+    expect(lastUsers).toHaveLength(firstUsers.length)
+  })
 })
 
 afterAll(() => {
