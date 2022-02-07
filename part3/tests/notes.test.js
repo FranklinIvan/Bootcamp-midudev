@@ -88,6 +88,16 @@ describe('POST', () => {
     expect(body).toHaveLength(initialNotes.length + 1)
     expect(contents).toContain(newNote.content)
   })
+
+  test('a invalid note w/out content/important is not added', async () => {
+    const newNote = {
+    }
+
+    await api
+      .post('/api/notes')
+      .send(newNote)
+      .expect(400)
+  })
 })
 
 describe('DELETE', () => {

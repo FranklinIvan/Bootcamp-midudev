@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const Note = require('../models/Note')
+const User = require('../models/User')
 
 router.get('/', async (_, res) => {
   const notes = await Note.find({})
@@ -23,26 +24,35 @@ router.get('/:id', (req, res, next) => {
     .catch(error => next(error))
 })
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const { body } = req
-  const { content, important } = body
+  const { content, important = false, userId } = body
 
-  if (!body || !content) {
-    return res.status(400).json({
-      error: true,
-      message: 'no content, check and try again'
-    })
-  }
+  console.log({ body })
+
+  const user = await User.findById(userId)
+
+  if (!body || content === undefined) return res.status(400).end()
+  if (content !== undefined && (content === null || content === '')) return res.status(400).end()
 
   const newNote = new Note({
     content,
-    important: typeof important !== 'undefined' ? important : false,
-    date: new Date().toISOString()
+    important,
+    date: new Date(),
+    user: user._id
   })
 
-  newNote.save()
-    .then(result => res.status(201).json(result))
-    .catch(error => console.error(error))
+  try {
+    const savedNote = await newNote.save()
+    // reference note id to document user
+    user.notes = user.notes.concat(savedNote._id)
+    await user.save()
+
+    res.status(201).json(savedNote)
+  } catch (error) {
+    res.status(400).end()
+    console.log(error)
+  }
 })
 
 router.put('/:id', (req, res, next) => {
