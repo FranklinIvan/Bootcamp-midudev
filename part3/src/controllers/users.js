@@ -4,9 +4,14 @@ const User = require('../models/User')
 
 router.post('/', async (req, res) => {
   const { body } = req
-  const { username, name, password } = body
+  const { username, name } = body
+  let { password } = body
 
   console.log({ body })
+
+  if (!body || Object.values(body) === 0) return res.status(400).end()
+  if (!username || !name || !password) return res.status(400).end()
+  if (typeof password !== 'string') password = password.toString()
 
   const saltRounds = await bcrypt.genSalt(10)
   const passwordHash = await bcrypt.hash(password, saltRounds)
