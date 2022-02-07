@@ -13,7 +13,7 @@ router.get('/', async (_, res) => {
   }
 })
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
   const { body } = req
   const { username, name } = body
   let { password } = body
@@ -37,7 +37,7 @@ router.post('/', async (req, res) => {
     const savedUser = await newUser.save()
     res.status(201).json(savedUser)
   } catch (error) {
-    console.log(error)
+    next(error)
   }
 })
 
