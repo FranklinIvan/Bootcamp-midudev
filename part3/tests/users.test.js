@@ -20,7 +20,7 @@ beforeEach(async () => {
 })
 
 describe('RANDOM', () => {
-  test('works as expected creating a new user', async () => {
+  test.skip('works as expected creating a new user', async () => {
     const users = await User.find({})
 
     expect(users).toHaveLength(1)
@@ -29,6 +29,7 @@ describe('RANDOM', () => {
 
 describe('POST', () => {
   test('a valid user added', async () => {
+    const firstUsers = await User.find({})
     const newUser = {
       username: 'frank',
       name: 'franklin',
@@ -40,6 +41,11 @@ describe('POST', () => {
       .send(newUser)
       .expect(201)
       .expect('Content-type', /application\/json/)
+
+    const lastUsers = await User.find({})
+    expect(lastUsers).toHaveLength(firstUsers.length + 1)
+    const usernames = lastUsers.map(user => user.username)
+    expect(usernames).toContain(newUser.username)
   })
 
   test('a invalid user w/out content is not added', async () => {

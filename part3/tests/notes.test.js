@@ -110,9 +110,9 @@ describe('DELETE', () => {
       .delete(`/api/notes/${firtsNotes[0].id}`)
       .expect(204)
 
-    const { body: secondNotes } = await getAllNotes()
-    expect(secondNotes).toHaveLength(initialNotes.length - 1)
-    expect(secondNotes).not.toContain(firtsNotes[0].content)
+    const { body: lastNotes } = await getAllNotes()
+    expect(lastNotes).toHaveLength(initialNotes.length - 1)
+    expect(lastNotes).not.toContain(firtsNotes[0].content)
   })
 
   // failed delete. Entry to CastError (handleErrors)
