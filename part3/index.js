@@ -7,6 +7,7 @@ const notFound = require('./src/middlewares/notFound')
 const handleErrors = require('./src/middlewares/handleErrors')
 const usersRouter = require('./src/controllers/users')
 const notesRouter = require('./src/controllers/notes')
+const loginRouter = require('./src/controllers/login')
 
 app.use(express.json())
 app.use(cors())
@@ -15,6 +16,7 @@ app.use(cors())
 app.get('/', (req, res) => res.send('<h2>Hi there</h2>'))
 app.use('/api/notes', notesRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/login', loginRouter)
 
 // 404
 app.use(notFound)
