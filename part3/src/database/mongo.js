@@ -8,12 +8,12 @@ const connectionString = NODE_ENV === 'test'
   : MONGO_DB_URI
 
 // esto se lo agregué para el test, no entiendo del todo*
-const options = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true
-}
+// const options = {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+//   useFindAndModify: false,
+//   useCreateIndex: true
+// }
 
 connect(connectionString)
   .then(() => console.log('database connected'))
