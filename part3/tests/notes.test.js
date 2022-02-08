@@ -19,7 +19,7 @@ beforeEach(async () => {
   }
 })
 
-describe.skip('RANDOM', () => {
+describe('RANDOM', () => {
   test('notes are returned as json', async () => {
     await api
       .get('/api/notes')
@@ -120,7 +120,7 @@ describe('POST', () => {
   })
 })
 
-describe.skip('DELETE', () => {
+describe('DELETE', () => {
   test('delete a random note', async () => {
     const { ids } = await getAllInfoFromNotes()
     const nRandom = Math.round(Math.random() * 1)
@@ -156,7 +156,7 @@ describe.skip('DELETE', () => {
   })
 })
 
-describe.skip('PUT', () => {
+describe('PUT', () => {
   test('modify the content of a note', async () => {
     const newNoteInfo = {
       content: 'new content of a note'

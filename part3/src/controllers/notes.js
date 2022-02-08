@@ -19,8 +19,6 @@ router.get('/', async (_, res) => {
 router.get('/:id', async (req, res, next) => {
   const { id } = req.params
 
-  console.log('typeof', typeof id)
-
   const note = await Note.findById(id).populate('user', {
     username: 1,
     name: 1
