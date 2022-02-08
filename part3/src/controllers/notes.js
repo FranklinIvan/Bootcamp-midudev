@@ -19,6 +19,8 @@ router.get('/', async (_, res) => {
 router.get('/:id', async (req, res, next) => {
   const { id } = req.params
 
+  console.log('typeof', typeof id)
+
   const note = await Note.findById(id).populate('user', {
     username: 1,
     name: 1
@@ -38,10 +40,11 @@ router.post('/', async (req, res) => {
 
   console.log({ body })
 
-  const user = await User.findById(userId)
-
+  if (!userId) return res.status(400).end()
   if (!body || content === undefined) return res.status(400).end()
   if (content !== undefined && (content === null || content === '')) return res.status(400).end()
+
+  const user = await User.findById(userId)
 
   const newNote = new Note({
     content,
