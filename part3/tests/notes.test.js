@@ -103,6 +103,21 @@ describe('POST', () => {
       .send(newNote)
       .expect(400)
   })
+
+  test('a invalid note w/out user id is not added', async () => {
+    const newNote = {
+      content: 'cannot insert',
+      important: true
+    }
+
+    await api
+      .post('/api/notes')
+      .send(newNote)
+      .expect(400)
+
+    const { body } = await getAllNotes()
+    expect(body).toHaveLength(initialNotes.length)
+  })
 })
 
 describe.skip('DELETE', () => {
