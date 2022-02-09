@@ -14,6 +14,11 @@ const ERROR_HANDLER = {
     message
   }),
 
+  TokenExpiredError: res => res.status(401).json({
+    error: true,
+    message: 'token expired'
+  }),
+
   defaultError: res => res.status(500).end()
 }
 
