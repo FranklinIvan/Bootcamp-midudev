@@ -10,5 +10,10 @@ module.exports = (error, req, res, next) => {
       error: true,
       message: 'the username is already taken'
     })
+  } else if (error.name === 'JsonWebTokenError') {
+    res.status(401).json({
+      error: true,
+      message: 'token invaid'
+    })
   } else res.status(500).end()
 }

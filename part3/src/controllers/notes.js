@@ -33,38 +33,33 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
   const { body } = req
   const { content, important = false } = body
 
-  console.log({ body })
-
-  const authorization = req.get('authorization')
+  const authorization = req.get('authorizationn')
   let token = null
-
-  console.log({ authorization })
 
   if (authorization && authorization.toLowerCase().startsWith('bearer')) {
     token = authorization.substring(7)
   }
 
-  let decodedToken = {}
-  try {
-    decodedToken = jwt.verify(token, process.env.SECRET_JWT)
-  } catch (error) {
-    console.error(error)
-  }
-
-  console.log({ decodedToken })
-
-  const { id: userId } = decodedToken
-
-  if (!token || !decodedToken.id) {
+  if (!token) {
     return res.status(401).json({
       error: true,
       message: 'token missing or invalid'
     })
   }
+
+  let decodedToken = ''
+  try {
+    decodedToken = jwt.verify(token, process.env.SECRET_JWT)
+  } catch (error) {
+    next(error)
+  }
+
+  const { id: userId } = decodedToken
+
   if (!userId) return res.status(400).end()
   if (!body || content === undefined) return res.status(400).end()
   if (content !== undefined && (content === null || content === '')) return res.status(400).end()
@@ -78,6 +73,8 @@ router.post('/', async (req, res) => {
     user: user._id
   })
 
+  console.log('asd')
+
   try {
     const savedNote = await newNote.save()
     // reference note id to document user
@@ -86,8 +83,7 @@ router.post('/', async (req, res) => {
 
     res.status(201).json(savedNote)
   } catch (error) {
-    res.status(400).end()
-    console.log(error)
+    next(error)
   }
 })
 
