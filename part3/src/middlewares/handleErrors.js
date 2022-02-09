@@ -1,19 +1,25 @@
+const ERROR_HANDLER = {
+  CastError: res => res.status(400).json({
+    error: true,
+    message: 'information used is malformed'
+  }),
+
+  JsonWebTokenError: res => res.status(401).json({
+    error: true,
+    message: 'token invaid'
+  }),
+
+  ValidationError: (res, { message }) => res.status(409).json({
+    error: true,
+    message
+  }),
+
+  defaultError: res => res.status(500).end()
+}
+
 module.exports = (error, req, res, next) => {
   console.error(error)
-  if (error.name === 'CastError') {
-    res.status(400).json({
-      error: true,
-      message: 'information used is malformed'
-    })
-  } else if (error.code === 11000) {
-    res.status(400).json({
-      error: true,
-      message: 'the username is already taken'
-    })
-  } else if (error.name === 'JsonWebTokenError') {
-    res.status(401).json({
-      error: true,
-      message: 'token invaid'
-    })
-  } else res.status(500).end()
+
+  const handler = ERROR_HANDLER[error.name] || ERROR_HANDLER.defaultError
+  handler(res, error)
 }
