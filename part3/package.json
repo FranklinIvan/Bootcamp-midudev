@@ -7,7 +7,7 @@
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "lint": "eslint .",
     "start": "cross-env NODE_ENV=production node index.js",
-    "test": "cross-env NODE_ENV=test PORT=3005 jest --verbose tests/login.test.js",
+    "test": "cross-env NODE_ENV=test PORT=3005 jest --verbose tests/notes.test.js",
     "test:watch": "npm run test -- --watch"
   },
   "keywords": [],
@@ -20,11 +20,11 @@
     "dotenv": "15.0.0",
     "express": "4.17.2",
     "jsonwebtoken": "8.5.1",
-    "mongoose": "6.1.9"
+    "mongoose": "6.1.9",
+    "mongoose-unique-validator": "3.0.0"
   },
   "devDependencies": {
     "jest": "27.4.7",
-    "mongoose-unique-validator": "^3.0.0",
     "standard": "16.0.4",
     "supertest": "6.2.2"
   },
