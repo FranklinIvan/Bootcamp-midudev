@@ -19,7 +19,7 @@ beforeEach(async () => {
   }
 })
 
-describe('RANDOM', () => {
+describe.skip('RANDOM', () => {
   test('notes are returned as json', async () => {
     await api
       .get('/api/notes')
@@ -39,7 +39,7 @@ describe('RANDOM', () => {
   })
 })
 
-describe('POST', () => {
+describe.skip('POST', () => {
   test('a valid note added', async () => {
     const { body: userLogged } = await logIn()
     const { token } = userLogged
@@ -190,10 +190,25 @@ describe('DELETE', () => {
     const { body } = await getAllNotes()
     expect(body).toHaveLength(initialNotes.length)
   })
+
+  test('forgotten token does not allow to save a valid note', async () => {
+    const { body: firtsNotes } = await getAllNotes()
+
+    await api
+      .delete(`/api/notes/${firtsNotes[0].id}`)
+      .expect(401)
+
+    const { body: lastNotes } = await getAllNotes()
+    const { contents } = await getAllInfoFromNotes()
+    expect(lastNotes).toHaveLength(firtsNotes.length)
+    expect(contents).toContain(firtsNotes[0].content)
+  })
 })
 
 describe.skip('PUT', () => {
   test('modify the content of a note', async () => {
+    const { body: userLogged } = await logIn()
+    const { token } = userLogged
     const newNoteInfo = {
       content: 'new content of a note'
     }
@@ -202,6 +217,7 @@ describe.skip('PUT', () => {
     await api
       .put(`/api/notes/${ids[0]}`)
       .send(newNoteInfo)
+      .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .expect('Content-type', /application\/json/)
 
@@ -213,6 +229,8 @@ describe.skip('PUT', () => {
   })
 
   test('modify the content/important of a note w/ undefined fields', async () => {
+    const { body: userLogged } = await logIn()
+    const { token } = userLogged
     const newNote = {
       important: undefined,
       content: undefined
@@ -222,11 +240,14 @@ describe.skip('PUT', () => {
 
     await api
       .put(`/api/notes/${ids[0]}`)
+      .set('Authorization', `Bearer ${token}`)
       .send(newNote)
       .expect(400)
   })
 
   test('modify the content/important of a note w/ null fields', async () => {
+    const { body: userLogged } = await logIn()
+    const { token } = userLogged
     const newNote = {
       content: null,
       important: null
@@ -237,7 +258,25 @@ describe.skip('PUT', () => {
     await api
       .put(`/api/notes/${notes[0].id}`)
       .send(newNote)
+      .set('Authorization', `Bearer ${token}`)
       .expect(400)
+
+    const { contents } = await getAllInfoFromNotes()
+    expect(contents).not.toContain(newNote.content)
+  })
+
+  test('forgotten token does not allow to save a valid note', async () => {
+    const newNote = {
+      content: 'cannot save it',
+      important: true
+    }
+
+    const { body: notes } = await getAllNotes()
+
+    await api
+      .put(`/api/notes/${notes[0].id}`)
+      .send(newNote)
+      .expect(401)
 
     const { contents } = await getAllInfoFromNotes()
     expect(contents).not.toContain(newNote.content)
