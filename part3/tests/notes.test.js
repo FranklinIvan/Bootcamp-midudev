@@ -147,13 +147,16 @@ describe('POST', () => {
   })
 })
 
-describe.skip('DELETE', () => {
+describe('DELETE', () => {
   test('delete a random note', async () => {
+    const { body: userLogged } = await logIn()
+    const { token } = userLogged
     const { ids } = await getAllInfoFromNotes()
     const nRandom = Math.round(Math.random() * 1)
 
     await api
       .delete(`/api/notes/${ids[nRandom]}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(204)
 
     const response = await getAllNotes()
@@ -161,21 +164,27 @@ describe.skip('DELETE', () => {
   })
 
   test('delete the first note added', async () => {
+    const { body: userLogged } = await logIn()
+    const { token } = userLogged
     const { body: firtsNotes } = await getAllNotes()
 
     await api
       .delete(`/api/notes/${firtsNotes[0].id}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(204)
 
     const { body: lastNotes } = await getAllNotes()
-    expect(lastNotes).toHaveLength(initialNotes.length - 1)
+    expect(lastNotes).toHaveLength(firtsNotes.length - 1)
     expect(lastNotes).not.toContain(firtsNotes[0].content)
   })
 
   // failed delete. Entry to CastError (handleErrors)
   test.skip('try to delete a note w/out id', async () => {
+    const { body: userLogged } = await logIn()
+    const { token } = userLogged
     await api
       .delete('/api/notes/}')
+      .set('Authorization', `Bearer ${token}`)
       .expect(400)
 
     const { body } = await getAllNotes()
