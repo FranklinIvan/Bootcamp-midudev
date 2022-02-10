@@ -6,7 +6,7 @@ const {
   initialNotes,
   getAllNotes,
   getAllInfoFromNotes,
-  getTokenForUser
+  logIn
 } = require('./helpers')
 
 beforeEach(async () => {
@@ -41,7 +41,7 @@ describe('RANDOM', () => {
 
 describe('POST', () => {
   test('a valid note added', async () => {
-    const { body: userLogged } = await getTokenForUser()
+    const { body: userLogged } = await logIn()
     const { token } = userLogged
 
     const newNote = {
@@ -64,7 +64,7 @@ describe('POST', () => {
   })
 
   test('a note w/out content is not added', async () => {
-    const { body: userLogged } = await getTokenForUser()
+    const { body: userLogged } = await logIn()
     const { token } = userLogged
     const newNote = {
       important: true
@@ -81,7 +81,7 @@ describe('POST', () => {
   })
 
   test('a note w/out important is added correctly', async () => {
-    const { body: userLogged } = await getTokenForUser()
+    const { body: userLogged } = await logIn()
     const { token } = userLogged
     const newNote = {
       content: 'This is a new note with a important default'
@@ -101,7 +101,7 @@ describe('POST', () => {
   })
 
   test('a invalid note w/out content/important is not added', async () => {
-    const { body: userLogged } = await getTokenForUser()
+    const { body: userLogged } = await logIn()
     const { token } = userLogged
     const newNote = {
     }
@@ -129,7 +129,7 @@ describe('POST', () => {
   })
 
   test('malformed token does not allow to save a valid note', async () => {
-    const { body: userLogged } = await getTokenForUser()
+    const { body: userLogged } = await logIn()
     const { token } = userLogged
     const newNote = {
       content: 'valid note but token forgotten',

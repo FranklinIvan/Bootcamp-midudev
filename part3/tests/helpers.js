@@ -46,7 +46,7 @@ const getAllUsers = async () => {
 }
 
 // login
-const getTokenForUser = async () => {
+const logIn = async () => {
   const { username, password } = initialUsers[0]
   const credentials = {
     username,
@@ -67,5 +67,5 @@ module.exports = {
   getAllNotes,
   getAllInfoFromNotes,
   getAllUsers,
-  getTokenForUser
+  logIn
 }
