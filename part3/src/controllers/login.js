@@ -5,13 +5,14 @@ const User = require('../models/User')
 
 router.post('/', async (req, res) => {
   const { body } = req
-  const { username, password } = body
-
+  const { username } = body
+  let { password } = body
   // console.log({ body })
 
   const user = await User.findOne({ username })
 
   if (!password || !user) return res.status(401).end()
+  if (typeof password !== 'string') password = password.toString()
   const passwordCorrect = await bcrypt.compare(password, user.passwordHash)
 
   if (!passwordCorrect) {

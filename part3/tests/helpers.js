@@ -47,10 +47,12 @@ const getAllUsers = async () => {
 
 // login
 const getTokenForUser = async () => {
+  const { username, password } = initialUsers[0]
   const credentials = {
-    username: 'midudev',
-    password: '123'
+    username,
+    password
   }
+
   const response = await api
     .post('/api/login')
     .send(credentials)
