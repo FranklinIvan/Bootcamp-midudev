@@ -4,22 +4,24 @@ const { connection } = require('mongoose')
 const { server } = require('../index')
 const {
   api,
+  initialUsers,
   getAllUsers
 } = require('./helpers')
 
 beforeEach(async () => {
   await User.deleteMany({})
 
-  const password = '123'
-  const passwordHash = await bcrypt.hash(password, 10)
+  for (const user of initialUsers) {
+    const { username, name, password } = user
+    const passwordHash = await bcrypt.hash(password.toString(), 10)
+    const newUser = new User({
+      username,
+      name,
+      passwordHash
+    })
 
-  const newUser = new User({
-    username: 'midudev',
-    name: 'midu',
-    passwordHash
-  })
-
-  await newUser.save()
+    await newUser.save()
+  }
 })
 
 describe('RANDOM', () => {
@@ -129,7 +131,7 @@ describe('POST', () => {
     await api
       .post('/api/users')
       .send(newUser)
-      .expect(400)
+      .expect(409)
       .expect('Content-type', /application\/json/)
 
     const { body: lastUsers } = await getAllUsers()

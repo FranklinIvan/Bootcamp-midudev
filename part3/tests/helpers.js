@@ -16,6 +16,14 @@ const initialNotes = [
   }
 ]
 
+const initialUsers = [
+  {
+    username: 'midudev',
+    name: 'midu',
+    password: 123
+  }
+]
+
 const getAllNotes = async () => {
   const response = await api.get('/api/notes')
   return response
@@ -37,10 +45,25 @@ const getAllUsers = async () => {
   return response
 }
 
+// login
+const getTokenForUser = async () => {
+  const credentials = {
+    username: 'midudev',
+    password: '123'
+  }
+  const response = await api
+    .post('/api/login')
+    .send(credentials)
+
+  return response
+}
+
 module.exports = {
   api,
   initialNotes,
+  initialUsers,
   getAllNotes,
   getAllInfoFromNotes,
-  getAllUsers
+  getAllUsers,
+  getTokenForUser
 }
