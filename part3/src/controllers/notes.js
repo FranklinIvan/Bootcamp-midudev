@@ -37,7 +37,7 @@ router.post('/', userExtractor, async (req, res, next) => {
   const { body } = req
   const { content, important = false } = body
 
-  // sacar la id de request
+  // sacar la id de request (viene de userExtractor))
   const { userId } = req
 
   if (!userId) return res.status(400).end()
@@ -52,8 +52,6 @@ router.post('/', userExtractor, async (req, res, next) => {
     date: new Date(),
     user: user._id
   })
-
-  console.log('asd')
 
   try {
     const savedNote = await newNote.save()

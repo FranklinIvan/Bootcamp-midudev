@@ -7,6 +7,8 @@ router.post('/', async (req, res) => {
   const { body } = req
   const { username, password } = body
 
+  // console.log({ body })
+
   const user = await User.findOne({ username })
 
   if (!password || !user) return res.status(401).end()
