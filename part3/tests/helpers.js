@@ -45,6 +45,16 @@ const getAllUsers = async () => {
   return response
 }
 
+const getAllInfoFromUsers = async () => {
+  const { body } = await getAllUsers()
+  const usernames = body.map(user => user.username)
+  const names = body.map(user => user.name)
+  return {
+    usernames,
+    names
+  }
+}
+
 // login
 const logIn = async () => {
   const { username, password } = initialUsers[0]
@@ -67,5 +77,6 @@ module.exports = {
   getAllNotes,
   getAllInfoFromNotes,
   getAllUsers,
-  logIn
+  logIn,
+  getAllInfoFromUsers
 }

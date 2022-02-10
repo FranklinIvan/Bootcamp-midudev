@@ -100,7 +100,7 @@ describe.skip('POST', () => {
     expect(contents).toContain(newNote.content)
   })
 
-  test('a invalid note w/out content/important is not added', async () => {
+  test('a invalid note w/ empty fiels is not added', async () => {
     const { body: userLogged } = await logIn()
     const { token } = userLogged
     const newNote = {
