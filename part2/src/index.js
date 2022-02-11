@@ -29,6 +29,9 @@ function App() {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState('');
   const [showAll, setShowAll] = useState(true)
+  // --
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
   useEffect(() => {
     noteService.getAll().then(initialNotes => setNotes(initialNotes))
@@ -63,16 +66,37 @@ function App() {
   }
 
   const handleShow = () => setShowAll(prev => !prev)
+
   const notesToShow = showAll ? notes : notes.filter(n => n.important === true)
+
+  const handleChangeUsername = e => setUsername(e.target.value)
+  const handleChangePassword = e => setPassword(e.target.value)
+
+  const handleLogin = e => {
+    e.preventDefault()
+
+    console.log(username)
+    console.log(password)
+    console.log('sending...')
+  }
 
   return (
     <div>
       <h1>Notes</h1>
+
+      <form onSubmit={handleLogin}>
+        <input placeholder='username' onChange={handleChangeUsername}/>
+        <input placeholder='password' onChange={handleChangePassword} type='password' />
+        <button>Log in</button>
+        <br />
+        <br />
+      </form>
+
       <button onClick={handleShow}>{showAll ? 'show only important' : 'show all'}</button>
       <Notes notesToShow={notesToShow} handleChange={toggleImportanceOf} />
 
       <form onSubmit={handleSubmit}>
-        <input type='text' onChange={handleChange} value={newNote}></input>
+        <input type='text' onChange={handleChange} value={newNote} />
         <button>Create note</button>
       </form>
     </div>
