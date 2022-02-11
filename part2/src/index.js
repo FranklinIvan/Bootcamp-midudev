@@ -29,7 +29,7 @@ function App() {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState('');
   const [showAll, setShowAll] = useState(true)
-  // --
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -37,7 +37,7 @@ function App() {
     noteService.getAll().then(initialNotes => setNotes(initialNotes))
   }, [])
 
-  const handleChange = e => setNewNote(e.target.value);
+  const handleChangeNote = e => setNewNote(e.target.value);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -69,8 +69,8 @@ function App() {
 
   const notesToShow = showAll ? notes : notes.filter(n => n.important === true)
 
-  const handleChangeUsername = e => setUsername(e.target.value)
-  const handleChangePassword = e => setPassword(e.target.value)
+  const handleChangeUsername = ({target}) => setUsername(target.value)
+  const handleChangePassword = ({target}) => setPassword(target.value)
 
   const handleLogin = e => {
     e.preventDefault()
@@ -85,8 +85,8 @@ function App() {
       <h1>Notes</h1>
 
       <form onSubmit={handleLogin}>
-        <input placeholder='username' onChange={handleChangeUsername}/>
-        <input placeholder='password' onChange={handleChangePassword} type='password' />
+        <input type='text' placeholder='username' onChange={handleChangeUsername} value={username}/>
+        <input type='password' placeholder='password' onChange={handleChangePassword} value={password} />
         <button>Log in</button>
         <br />
         <br />
@@ -96,7 +96,7 @@ function App() {
       <Notes notesToShow={notesToShow} handleChange={toggleImportanceOf} />
 
       <form onSubmit={handleSubmit}>
-        <input type='text' onChange={handleChange} value={newNote} />
+        <input type='text' onChange={handleChangeNote} value={newNote} />
         <button>Create note</button>
       </form>
     </div>
