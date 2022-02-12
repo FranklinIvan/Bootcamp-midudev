@@ -6,45 +6,20 @@ import noteService from './services/notes'
 import loginService from './services/login'
 
 // components
-const Note = ({ id, content, important, handleChange }) => {
-  return (
-    <li>
-      <span>{content}</span>
-      <button onClick={handleChange(id)}>{important ? 'make not important' : 'make important'}</button>
-    </li>
-  )
-}
+import RenderLoginForm from './components/loginForm'
 
-const Notes = ({ notesToShow, handleChange }) => {
+const Note = ({ notes, toggleImportance }) => {
   return (
     <ol>
-      {notesToShow
-        .map(note =>
-          (<Note key={note.id} {...note} handleChange={handleChange} />)
-        )}
+      {
+        notes.map(note =>
+          <li key={note.id}>
+            <span>{note.content}</span>
+            <button onClick={toggleImportance}>{note.important ? 'make not important' : 'make important'}</button>
+          </li>
+        )
+      }
     </ol>
-  )
-}
-
-const RenderLoginForm = ({ handleLogin, type, placeholder, handleChangeCredentials, value }) => {
-  return (
-    <form onSubmit={handleLogin}>
-      <input
-        type={type[0]}
-        onChange={handleChangeCredentials[0]}
-        value={value[0]}
-        placeholder={placeholder[0]}
-      />
-      <input
-        type={type[1]}
-        onChange={handleChangeCredentials[1]}
-        value={value[1]}
-        placeholder={placeholder[1]}
-      />
-      <button>log in</button>
-      <br />
-      <br />
-    </form>
   )
 }
 
@@ -109,19 +84,20 @@ function App () {
     setNewNote('')
   }
 
-  const toggleImportanceOf = (id) => {
-    const note = notes.find(n => n.id === id)
-    const changedNote = { ...note, important: !note.important }
+  const toggleImportance = (id) => {
+    console.log('ndeahh')
+    // const note = notes.find(n => n.id === id)
+    // const changedNote = { ...note, important: !note.important }
 
-    return () => {
-      noteService.update(id, changedNote)
-        .then(returnedNote => {
-          setNotes(notes.map(note => note.id !== id ? note : returnedNote))
-        })
-    }
+    // return () => {
+    //   noteService.update(id, changedNote)
+    //     .then(returnedNote => {
+    //       setNotes(notes.map(note => note.id !== id ? note : returnedNote))
+    //     })
+    // }
   }
 
-  const handleShow = () => setShowAll(prev => !prev)
+  const handleShowNotes = () => setShowAll(prev => !prev)
 
   const notesToShow = showAll ? notes : notes.filter(n => n.important === true)
 
@@ -184,8 +160,8 @@ function App () {
             />
       }
 
-      <button onClick={handleShow}>{showAll ? 'show only important' : 'show all'}</button>
-      <Notes notesToShow={notesToShow} handleChange={toggleImportanceOf} />
+      <button onClick={handleShowNotes}>{showAll ? 'show only important' : 'show all'}</button>
+      <Note notes={notesToShow} toggleImportance={toggleImportance} />
 
     </div>
   )
