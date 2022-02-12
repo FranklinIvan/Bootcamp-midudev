@@ -1,9 +1,9 @@
 // Explicación: viedeo 5 - Fetching y mutación de datos
 import ReactDOM from 'react-dom'
-import './App.css';
-import { useEffect, useState } from 'react';
-import noteService from './services/notes';
-import loginService from './services/login';
+import './App.css'
+import { useEffect, useState } from 'react'
+import noteService from './services/notes'
+import loginService from './services/login'
 
 // components
 const Note = ({ id, content, important, handleChange }) => {
@@ -26,16 +26,16 @@ const Notes = ({ notesToShow, handleChange }) => {
   )
 }
 
-const RenderLoginForm = ({handleLogin, type, placeholder, handleChangeCredentials, value }) => {
+const RenderLoginForm = ({ handleLogin, type, placeholder, handleChangeCredentials, value }) => {
   return (
     <form onSubmit={handleLogin}>
-      <input 
+      <input
         type={type[0]}
         onChange={handleChangeCredentials[0]}
         value={value[0]}
         placeholder={placeholder[0]}
       />
-      <input 
+      <input
         type={type[1]}
         onChange={handleChangeCredentials[1]}
         value={value[1]}
@@ -48,23 +48,30 @@ const RenderLoginForm = ({handleLogin, type, placeholder, handleChangeCredential
   )
 }
 
-const RenderCreateNoteForm = ({handleSubmitNote, type, placeholder, handleChangeNote, value }) => {
+const RenderCreateNoteForm = ({ handleSubmitNote, type, placeholder, handleLogout, handleChangeNote, value }) => {
   return (
-    <form onSubmit={handleSubmitNote}>
-      <input 
-        type={type}
-        placeholder={placeholder}
-        onChange={handleChangeNote}
-        value={value}
-      />
-      <button>create note</button>
-    </form>
+    <>
+      <form onSubmit={handleSubmitNote}>
+        <input
+          type={type}
+          placeholder={placeholder}
+          onChange={handleChangeNote}
+          value={value}
+        />
+        <button>create note</button>
+      </form>
+      <br />
+      <div>
+        <button onClick={handleLogout}>log out</button>
+      </div>
+    </>
+
   )
 }
 
-function App() {
-  const [notes, setNotes] = useState([]);
-  const [newNote, setNewNote] = useState('');
+function App () {
+  const [notes, setNotes] = useState([])
+  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -76,21 +83,30 @@ function App() {
     noteService.getAll().then(initialNotes => setNotes(initialNotes))
   }, [])
 
-  const handleChangeNote = e => setNewNote(e.target.value);
+  useEffect(() => {
+    const loggedUser = window.localStorage.getItem('loggedNoteAppUser')
+    if (loggedUser) {
+      const user = JSON.parse(loggedUser)
+      setUser(user)
+      noteService.setToken(user.token)
+    }
+  }, [])
+
+  const handleChangeNote = e => setNewNote(e.target.value)
 
   const handleSubmitNote = e => {
-    e.preventDefault();
+    e.preventDefault()
 
     const newNoteToAddToState = {
       content: newNote,
       important: Math.random() < 0.5
     }
 
-    const {token} = user
+    const { token } = user
 
-    noteService.create(newNoteToAddToState, {token})
+    noteService.create(newNoteToAddToState, { token })
       .then(newNote => setNotes(prevNotes => prevNotes.concat(newNote)))
-    setNewNote('');
+    setNewNote('')
   }
 
   const toggleImportanceOf = (id) => {
@@ -109,8 +125,8 @@ function App() {
 
   const notesToShow = showAll ? notes : notes.filter(n => n.important === true)
 
-  const handleChangeUsername = ({target}) => setUsername(target.value)
-  const handleChangePassword = ({target}) => setPassword(target.value)
+  const handleChangeUsername = ({ target }) => setUsername(target.value)
+  const handleChangePassword = ({ target }) => setPassword(target.value)
 
   const handleLogin = async e => {
     e.preventDefault()
@@ -120,20 +136,27 @@ function App() {
         username,
         password
       })
-  
+
       setUser(user)
       setUsername('')
       setPassword('')
 
-      noteService.setToken(user.token)
+      window.localStorage.setItem('loggedNoteAppUser', JSON.stringify(user))
 
+      noteService.setToken(user.token)
     } catch (error) {
       console.error(error)
       setErrorMessage('invalid user or password')
-      setTimeout(()=> {
+      setTimeout(() => {
         setErrorMessage('')
       }, 5000)
     }
+  }
+
+  const handleLogout = () => {
+    setUser(null)
+    noteService.setToken(null)
+    window.localStorage.removeItem('loggedNoteAppUser')
   }
 
   return (
@@ -143,25 +166,27 @@ function App() {
 
       {
         user === null
-         ? <RenderLoginForm
-            handleLogin={handleLogin}
-            type={['text','password']}
-            placeholder={['username','password']}
-            handleChangeCredentials={[handleChangeUsername, handleChangePassword]}
-            value={[username, password]}
-          />
+          ? <RenderLoginForm
+              handleLogin={handleLogin}
+              type={['text', 'password']}
+              placeholder={['username', 'password']}
+              handleChangeCredentials={[handleChangeUsername, handleChangePassword]}
+              value={[username, password]}
+            />
 
-        : <RenderCreateNoteForm
-            handleSubmitNote={handleSubmitNote}
-            type={'text'}
-            placeholder={'write your new note'}
-            handleChangeNote={handleChangeNote}
-            value={newNote}
-          />
+          : <RenderCreateNoteForm
+              handleSubmitNote={handleSubmitNote}
+              type='text'
+              placeholder='write your new note'
+              handleChangeNote={handleChangeNote}
+              handleLogout={handleLogout}
+              value={newNote}
+            />
       }
 
       <button onClick={handleShow}>{showAll ? 'show only important' : 'show all'}</button>
       <Notes notesToShow={notesToShow} handleChange={toggleImportanceOf} />
+
     </div>
   )
 }
