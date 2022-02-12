@@ -125,7 +125,7 @@ function App() {
       setUsername('')
       setPassword('')
 
-      console.log(user)
+      noteService.setToken(user.token)
 
     } catch (error) {
       console.error(error)
