@@ -2,13 +2,16 @@ export default function ({ notes, toggleImportance }) {
   return (
     <ol>
       {
-          notes.map(note =>
+        notes.map(note => {
+          const label = note.important ? 'make not important' : 'make important'
+          return (
             <li key={note.id}>
               <span>{note.content}</span>
-              <button onClick={toggleImportance}>{note.important ? 'make not important' : 'make important'}</button>
+              <button onClick={toggleImportance}>{label}</button>
             </li>
           )
-        }
+        })
+      }
     </ol>
   )
 }

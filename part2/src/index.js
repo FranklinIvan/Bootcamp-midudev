@@ -148,7 +148,6 @@ function App () {
 
       <button onClick={handleShowNotes}>{showAll ? 'show only important' : 'show all'}</button>
       <Notes notes={notesToShow} toggleImportance={toggleImportance} />
-
     </div>
   )
 }
