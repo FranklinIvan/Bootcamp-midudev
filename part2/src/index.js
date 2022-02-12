@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import './App.css';
 import { useEffect, useState } from 'react';
 import noteService from './services/notes';
+import loginService from './services/login';
 
 // components
 const Note = ({ id, content, important, handleChange }) => {
@@ -25,13 +26,51 @@ const Notes = ({ notesToShow, handleChange }) => {
   )
 }
 
+const RenderLoginForm = ({handleLogin, type, placeholder, handleChangeCredentials, value }) => {
+  return (
+    <form onSubmit={handleLogin}>
+      <input 
+        type={type[0]}
+        onChange={handleChangeCredentials[0]}
+        value={value[0]}
+        placeholder={placeholder[0]}
+      />
+      <input 
+        type={type[1]}
+        onChange={handleChangeCredentials[1]}
+        value={value[1]}
+        placeholder={placeholder[1]}
+      />
+      <button>log in</button>
+      <br />
+      <br />
+    </form>
+  )
+}
+
+const RenderCreateNoteForm = ({handleSubmitNote, type, placeholder, handleChangeNote, value }) => {
+  return (
+    <form onSubmit={handleSubmitNote}>
+      <input 
+        type={type}
+        placeholder={placeholder}
+        onChange={handleChangeNote}
+        value={value}
+      />
+      <button>create note</button>
+    </form>
+  )
+}
+
 function App() {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState('');
   const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState('')
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     noteService.getAll().then(initialNotes => setNotes(initialNotes))
@@ -39,16 +78,17 @@ function App() {
 
   const handleChangeNote = e => setNewNote(e.target.value);
 
-  const handleSubmit = e => {
+  const handleSubmitNote = e => {
     e.preventDefault();
 
     const newNoteToAddToState = {
-      // id: notes.length + 1,
       content: newNote,
       important: Math.random() < 0.5
     }
 
-    noteService.create(newNoteToAddToState)
+    const {token} = user
+
+    noteService.create(newNoteToAddToState, {token})
       .then(newNote => setNotes(prevNotes => prevNotes.concat(newNote)))
     setNewNote('');
   }
@@ -72,33 +112,56 @@ function App() {
   const handleChangeUsername = ({target}) => setUsername(target.value)
   const handleChangePassword = ({target}) => setPassword(target.value)
 
-  const handleLogin = e => {
+  const handleLogin = async e => {
     e.preventDefault()
 
-    console.log(username)
-    console.log(password)
-    console.log('sending...')
+    try {
+      const user = await loginService.login({
+        username,
+        password
+      })
+  
+      setUser(user)
+      setUsername('')
+      setPassword('')
+
+      console.log(user)
+
+    } catch (error) {
+      console.error(error)
+      setErrorMessage('invalid user or password')
+      setTimeout(()=> {
+        setErrorMessage('')
+      }, 5000)
+    }
   }
 
   return (
     <div>
       <h1>Notes</h1>
+      <p>{errorMessage}</p>
 
-      <form onSubmit={handleLogin}>
-        <input type='text' placeholder='username' onChange={handleChangeUsername} value={username}/>
-        <input type='password' placeholder='password' onChange={handleChangePassword} value={password} />
-        <button>Log in</button>
-        <br />
-        <br />
-      </form>
+      {
+        user === null
+         ? <RenderLoginForm
+            handleLogin={handleLogin}
+            type={['text','password']}
+            placeholder={['username','password']}
+            handleChangeCredentials={[handleChangeUsername, handleChangePassword]}
+            value={[username, password]}
+          />
+
+        : <RenderCreateNoteForm
+            handleSubmitNote={handleSubmitNote}
+            type={'text'}
+            placeholder={'write your new note'}
+            handleChangeNote={handleChangeNote}
+            value={newNote}
+          />
+      }
 
       <button onClick={handleShow}>{showAll ? 'show only important' : 'show all'}</button>
       <Notes notesToShow={notesToShow} handleChange={toggleImportanceOf} />
-
-      <form onSubmit={handleSubmit}>
-        <input type='text' onChange={handleChangeNote} value={newNote} />
-        <button>Create note</button>
-      </form>
     </div>
   )
 }

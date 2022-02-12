@@ -1,5 +1,4 @@
 import axios from 'axios'
-
 const baseURL = 'http://localhost:3001/api/notes'
 
 const getAll = () => {
@@ -7,7 +6,12 @@ const getAll = () => {
     return request.then(response => response.data)
 }
 
-const create = newObject => {
+const create = (newObject, {token}) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
     const request = axios.post(baseURL, newObject)
     return request.then(response => response.data)
 }
