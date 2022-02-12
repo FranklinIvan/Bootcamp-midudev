@@ -12,7 +12,7 @@ const create = (newObject, {token}) => {
             Authorization: `Bearer ${token}`
         }
     }
-    const request = axios.post(baseURL, newObject)
+    const request = axios.post(baseURL, newObject, config)
     return request.then(response => response.data)
 }
 
