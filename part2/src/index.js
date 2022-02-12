@@ -6,22 +6,8 @@ import noteService from './services/notes'
 import loginService from './services/login'
 
 // components
-import RenderLoginForm from './components/loginForm'
-
-const Note = ({ notes, toggleImportance }) => {
-  return (
-    <ol>
-      {
-        notes.map(note =>
-          <li key={note.id}>
-            <span>{note.content}</span>
-            <button onClick={toggleImportance}>{note.important ? 'make not important' : 'make important'}</button>
-          </li>
-        )
-      }
-    </ol>
-  )
-}
+import RenderLoginForm from './components/LoginForm'
+import Notes from './components/Notes'
 
 const RenderCreateNoteForm = ({ handleSubmitNote, type, placeholder, handleLogout, handleChangeNote, value }) => {
   return (
@@ -161,7 +147,7 @@ function App () {
       }
 
       <button onClick={handleShowNotes}>{showAll ? 'show only important' : 'show all'}</button>
-      <Note notes={notesToShow} toggleImportance={toggleImportance} />
+      <Notes notes={notesToShow} toggleImportance={toggleImportance} />
 
     </div>
   )
