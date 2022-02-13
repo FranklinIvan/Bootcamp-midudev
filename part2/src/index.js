@@ -14,9 +14,6 @@ function App () {
   const [notes, setNotes] = useState([])
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
-
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -33,7 +30,8 @@ function App () {
   }, [])
 
   const addNote = newObject => {
-    noteService.create(newObject)
+    noteService
+      .create(newObject)
       .then(newNote => setNotes(prevNotes => prevNotes.concat(newNote)))
   }
 
@@ -54,31 +52,22 @@ function App () {
 
   const notesToShow = showAll ? notes : notes.filter(n => n.important === true)
 
-  const handleChangeUsername = ({ target }) => setUsername(target.value)
-  const handleChangePassword = ({ target }) => setPassword(target.value)
-
-  const handleLogin = async e => {
-    e.preventDefault()
-
+  const handleLogin = async credentials => {
     try {
-      const user = await loginService.login({
-        username,
-        password
-      })
-
+      const user = await loginService.login(credentials)
       setUser(user)
-      setUsername('')
-      setPassword('')
 
       window.localStorage.setItem('loggedNoteAppUser', JSON.stringify(user))
-
       noteService.setToken(user.token)
+
     } catch (error) {
       console.error(error)
       setErrorMessage('invalid user or password')
+
       setTimeout(() => {
         setErrorMessage('')
       }, 5000)
+
     }
   }
 
@@ -97,8 +86,6 @@ function App () {
         user === null
           ? <RenderLoginForm
               handleLogin={handleLogin}
-              handleChangeCredentials={[handleChangeUsername, handleChangePassword]}
-              value={[username, password]}
             />
 
           : <RenderCreateNoteForm
