@@ -6,9 +6,9 @@ import noteService from './services/notes'
 import loginService from './services/login'
 
 // components
+import RenderCreateNoteForm from './components/NoteForm'
 import RenderLoginForm from './components/LoginForm'
 import Notes from './components/Notes'
-import RenderCreateNoteForm from './components/NoteForm'
 
 function App () {
   const [notes, setNotes] = useState([])
@@ -29,9 +29,9 @@ function App () {
     }
   }, [])
 
-  const addNote = newObject => {
+  const addNote = noteObject => {
     noteService
-      .create(newObject)
+      .create(noteObject)
       .then(newNote => setNotes(prevNotes => prevNotes.concat(newNote)))
   }
 
@@ -49,7 +49,6 @@ function App () {
   }
 
   const handleShowNotes = () => setShowAll(prev => !prev)
-
   const notesToShow = showAll ? notes : notes.filter(n => n.important === true)
 
   const handleLogin = async credentials => {

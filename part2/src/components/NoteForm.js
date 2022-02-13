@@ -1,4 +1,5 @@
 import { useState } from "react"
+import Toggleable from "./Toggleable"
 
 export default function RenderCreateNoteForm ({ addNote, handleLogout, }) {
   const [newNote, setNewNote] = useState('')
@@ -7,16 +8,17 @@ export default function RenderCreateNoteForm ({ addNote, handleLogout, }) {
   const handleSubmit = e => {
     e.preventDefault()
 
-    const newObject = {
+    const noteObject = {
       content: newNote,
       important: Math.random() < 0.5
     }
-    addNote(newObject)
+    addNote(noteObject)
     setNewNote('')
   }
 
   return (
-    <>
+    <Toggleable labelButton='create a note'>
+    <h4>Create a note</h4>
       <form onSubmit={handleSubmit}>
         <input
           type='text'
@@ -30,7 +32,7 @@ export default function RenderCreateNoteForm ({ addNote, handleLogout, }) {
       <div>
         <button onClick={handleLogout}>log out</button>
       </div>
-    </>
+    </Toggleable>
 
   )
 }
