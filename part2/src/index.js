@@ -116,8 +116,6 @@ function App () {
 
           : <RenderCreateNoteForm
               handleSubmitNote={handleSubmitNote}
-              type='text'
-              placeholder='write your new note'
               handleChangeNote={handleChangeNote}
               handleLogout={handleLogout}
               value={newNote}

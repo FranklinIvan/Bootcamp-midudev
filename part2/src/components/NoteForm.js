@@ -1,10 +1,10 @@
-export default function RenderCreateNoteForm ({ handleSubmitNote, type, placeholder, handleLogout, handleChangeNote, value }) {
+export default function RenderCreateNoteForm ({ handleSubmitNote, handleLogout, handleChangeNote, value }) {
   return (
     <>
       <form onSubmit={handleSubmitNote}>
         <input
-          type={type}
-          placeholder={placeholder}
+          type='text'
+          placeholder='write your new note'
           onChange={handleChangeNote}
           value={value}
         />
