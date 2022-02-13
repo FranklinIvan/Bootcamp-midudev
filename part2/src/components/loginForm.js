@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export default function RenderLoginForm ({ handleLogin, type, placeholder, handleChangeCredentials, value }) {
+export default function RenderLoginForm ({ handleLogin, handleChangeCredentials, value }) {
   const [loginVisible, setLoginVisible] = useState(false)
 
   const hideWhenVisible = { display: loginVisible ? 'none' : '' }
@@ -15,16 +15,16 @@ export default function RenderLoginForm ({ handleLogin, type, placeholder, handl
       <div style={ShowWhenVisible}>
         <form onSubmit={handleLogin}>
           <input
-            type={type[0]}
+            type='text'
             onChange={handleChangeCredentials[0]}
             value={value[0]}
-            placeholder={placeholder[0]}
+            placeholder='username'
           />
           <input
-            type={type[1]}
+            type='password'
             onChange={handleChangeCredentials[1]}
             value={value[1]}
-            placeholder={placeholder[1]}
+            placeholder='password'
           />
           <button>log in</button>
           <br />

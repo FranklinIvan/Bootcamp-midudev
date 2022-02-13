@@ -110,8 +110,6 @@ function App () {
         user === null
           ? <RenderLoginForm
               handleLogin={handleLogin}
-              type={['text', 'password']}
-              placeholder={['username', 'password']}
               handleChangeCredentials={[handleChangeUsername, handleChangePassword]}
               value={[username, password]}
             />
