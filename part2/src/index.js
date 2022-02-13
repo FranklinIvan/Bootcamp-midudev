@@ -8,27 +8,7 @@ import loginService from './services/login'
 // components
 import RenderLoginForm from './components/LoginForm'
 import Notes from './components/Notes'
-
-const RenderCreateNoteForm = ({ handleSubmitNote, type, placeholder, handleLogout, handleChangeNote, value }) => {
-  return (
-    <>
-      <form onSubmit={handleSubmitNote}>
-        <input
-          type={type}
-          placeholder={placeholder}
-          onChange={handleChangeNote}
-          value={value}
-        />
-        <button>create note</button>
-      </form>
-      <br />
-      <div>
-        <button onClick={handleLogout}>log out</button>
-      </div>
-    </>
-
-  )
-}
+import RenderCreateNoteForm from './components/NoteForm'
 
 function App () {
   const [notes, setNotes] = useState([])
@@ -53,7 +33,7 @@ function App () {
     }
   }, [])
 
-  const handleChangeNote = e => setNewNote(e.target.value)
+  const handleChangeNote = ({ target }) => setNewNote(target.value)
 
   const handleSubmitNote = e => {
     e.preventDefault()
