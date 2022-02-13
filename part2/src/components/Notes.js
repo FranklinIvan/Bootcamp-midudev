@@ -1,4 +1,4 @@
-export default function ({ notes, toggleImportance }) {
+export default function Notes ({ notes, toggleImportance }) {
   return (
     <ol>
       {

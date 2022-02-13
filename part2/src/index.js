@@ -12,7 +12,6 @@ import RenderCreateNoteForm from './components/NoteForm'
 
 function App () {
   const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -33,21 +32,9 @@ function App () {
     }
   }, [])
 
-  const handleChangeNote = ({ target }) => setNewNote(target.value)
-
-  const handleSubmitNote = e => {
-    e.preventDefault()
-
-    const newNoteToAddToState = {
-      content: newNote,
-      important: Math.random() < 0.5
-    }
-
-    const { token } = user
-
-    noteService.create(newNoteToAddToState, { token })
+  const addNote = newObject => {
+    noteService.create(newObject)
       .then(newNote => setNotes(prevNotes => prevNotes.concat(newNote)))
-    setNewNote('')
   }
 
   const toggleImportance = (id) => {
@@ -115,10 +102,8 @@ function App () {
             />
 
           : <RenderCreateNoteForm
-              handleSubmitNote={handleSubmitNote}
-              handleChangeNote={handleChangeNote}
+              addNote={addNote}
               handleLogout={handleLogout}
-              value={newNote}
             />
       }
 

@@ -1,12 +1,28 @@
-export default function RenderCreateNoteForm ({ handleSubmitNote, handleLogout, handleChangeNote, value }) {
+import { useState } from "react"
+
+export default function RenderCreateNoteForm ({ addNote, handleLogout, }) {
+  const [newNote, setNewNote] = useState('')
+
+  const handleChange = ({ target }) => setNewNote(target.value)
+  const handleSubmit = e => {
+    e.preventDefault()
+
+    const newObject = {
+      content: newNote,
+      important: Math.random() < 0.5
+    }
+    addNote(newObject)
+    setNewNote('')
+  }
+
   return (
     <>
-      <form onSubmit={handleSubmitNote}>
+      <form onSubmit={handleSubmit}>
         <input
           type='text'
           placeholder='write your new note'
-          onChange={handleChangeNote}
-          value={value}
+          onChange={handleChange}
+          value={newNote}
         />
         <button>create note</button>
       </form>
