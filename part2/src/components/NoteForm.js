@@ -19,7 +19,7 @@ export default function RenderCreateNoteForm ({ addNote, handleLogout, }) {
   }
 
   return (
-    <Toggleable ref={toggleRef} labelButton='create a note'>
+    <Toggleable ref={toggleRef}>
     <h4>Create a note</h4>
       <form onSubmit={handleSubmit}>
         <input

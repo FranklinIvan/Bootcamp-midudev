@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import Toggleable from './Toggleable'
+import PropTypes from 'prop-types'
 
 export default function RenderLoginForm ({ handleLogin }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
 
   const handleUsernameChange = ({ target }) => setUsername(target.value)
   const handlePasswordChange = ({ target }) => setPassword(target.value)
@@ -41,4 +43,8 @@ export default function RenderLoginForm ({ handleLogin }) {
       </form>
     </Toggleable>
   )
+}
+
+RenderLoginForm.propTypes = {
+  handleLogin: PropTypes.func.isRequired
 }
