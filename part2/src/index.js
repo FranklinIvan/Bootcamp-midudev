@@ -58,7 +58,6 @@ function App () {
 
       window.localStorage.setItem('loggedNoteAppUser', JSON.stringify(user))
       noteService.setToken(user.token)
-
     } catch (error) {
       console.error(error)
       setErrorMessage('invalid user or password')
@@ -66,7 +65,6 @@ function App () {
       setTimeout(() => {
         setErrorMessage('')
       }, 5000)
-
     }
   }
 
@@ -100,10 +98,10 @@ function App () {
       <ol>
         {
           notesToShow
-            .map(note => 
-              <Note 
-                key={note.id} 
-                note={note} 
+            .map(note =>
+              <Note
+                key={note.id}
+                note={note}
                 toggleImportance={toggleImportance}
               />
             )
