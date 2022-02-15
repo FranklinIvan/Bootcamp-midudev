@@ -8,7 +8,7 @@ import loginService from './services/login'
 // components
 import RenderCreateNoteForm from './components/NoteForm'
 import RenderLoginForm from './components/LoginForm'
-import Notes from './components/Notes'
+import Note from './components/Note'
 
 function App () {
   const [notes, setNotes] = useState([])
@@ -93,8 +93,23 @@ function App () {
             />
       }
 
-      <button onClick={handleShowNotes}>{showAll ? 'show only important' : 'show all'}</button>
-      <Notes notes={notesToShow} toggleImportance={toggleImportance} />
+      <button onClick={handleShowNotes}>
+        {showAll ? 'show only important' : 'show all'}
+      </button>
+
+      <ol>
+        {
+          notesToShow
+            .map(note => 
+              <Note 
+                key={note.id} 
+                note={note} 
+                toggleImportance={toggleImportance}
+              />
+            )
+        }
+      </ol>
+
     </div>
   )
 }
