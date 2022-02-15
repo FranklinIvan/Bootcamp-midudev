@@ -34,5 +34,5 @@ test('clicking the button calls event handler once', () => {
   const button = view.getByText('make not important')
   fireEvent.click(button)
 
-  expect(mockHandler).toHaveBeenCalledTimes(1)
+  expect(mockHandler).toHaveBeenCalledTimes(1) 
 })
