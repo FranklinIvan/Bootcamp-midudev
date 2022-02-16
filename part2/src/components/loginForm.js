@@ -37,7 +37,7 @@ export default function RenderLoginForm ({ handleLogin }) {
           value={password}
           placeholder='password'
         />
-        <button>log in</button>
+        <button id='form-login-button'>log in</button>
         <br />
         <br />
       </form>
