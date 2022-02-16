@@ -6,7 +6,6 @@ export default function RenderLoginForm ({ handleLogin }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-
   const handleUsernameChange = ({ target }) => setUsername(target.value)
   const handlePasswordChange = ({ target }) => setPassword(target.value)
   const handleSubmit = async e => {
