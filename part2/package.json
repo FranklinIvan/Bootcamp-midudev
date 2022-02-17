@@ -22,12 +22,9 @@
   },
   "eslintConfig": {
     "env": {
-      "Cypress/globals": true
+      "cypress/globals": true
     },
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ],
+    "extends": "./node_modules/standard/eslintrc.json",
     "plugins": [
       "cypress"
     ]
