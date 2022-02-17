@@ -1,6 +1,18 @@
 describe('Note app', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000')
+    const webSite = 'http://localhost:3000'
+    const api = 'http://localhost:3001'
+
+    cy.visit(webSite)
+    cy.request('POST', `${api}/api/testing/reset`)
+
+    const user = {
+      name: 'midu',
+      username: 'midudev',
+      password: '123'
+    }
+
+    cy.request('POST', `${api}/api/users`, user)
   })
 
   it('frontpage can be opened', () => {
@@ -16,7 +28,7 @@ describe('Note app', () => {
     cy.get('[placeholder="username"]').type('midudev')
     cy.get('[placeholder="password"]').last().type('123')
     cy.get('#form-login-button').click()
-    cy.contains('create a note').click()
+    cy.contains('create a note')
   })
 
   describe('when a user logged in', () => {
