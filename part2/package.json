@@ -24,7 +24,10 @@
     "env": {
       "cypress/globals": true
     },
-    "extends": "./node_modules/standard/eslintrc.json",
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
     "plugins": [
       "cypress"
     ]

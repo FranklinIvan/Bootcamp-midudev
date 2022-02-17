@@ -60,7 +60,7 @@ function App () {
       noteService.setToken(user.token)
     } catch (error) {
       console.error(error)
-      setErrorMessage('invalid user or password')
+      setErrorMessage('wrong credentials')
 
       setTimeout(() => {
         setErrorMessage('')
