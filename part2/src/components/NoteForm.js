@@ -19,7 +19,7 @@ export default function RenderCreateNoteForm ({ addNote, handleLogout }) {
   }
 
   return (
-    <Toggleable ref={toggleRef}>
+    <Toggleable ref={toggleRef} labelButton='create a note'>
       <h4>Create a note</h4>
       <form onSubmit={handleSubmit}>
         <input
@@ -28,7 +28,7 @@ export default function RenderCreateNoteForm ({ addNote, handleLogout }) {
           onChange={handleChange}
           value={newNote}
         />
-        <button>create note</button>
+        <button>save</button>
       </form>
       <br />
       <div>
