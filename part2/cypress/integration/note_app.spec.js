@@ -16,7 +16,7 @@ describe('Note app', () => {
     cy.get('[placeholder="username"]').type('midudev')
     cy.get('[placeholder="password"]').last().type('123')
     cy.get('#form-login-button').click()
-    cy.contains('create note')
+    cy.contains('create a note').click()
   })
 
   describe('when a user logged in', () => {
@@ -25,9 +25,13 @@ describe('Note app', () => {
       cy.get('[placeholder="username"]').type('midudev')
       cy.get('[placeholder="password"]').last().type('123')
       cy.get('#form-login-button').click()
+      cy.contains('create a note').click()
     })
     it('a new note can be created', () => {
-      cy.contains('show me')
+      const contentNote = 'a new note created from cypress testing'
+      cy.get('[placeholder="write your new note"]').type(contentNote)
+      cy.contains('save').click()
+      cy.contains(contentNote)
     })
   })
 })
