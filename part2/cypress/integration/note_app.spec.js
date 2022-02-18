@@ -71,7 +71,7 @@ describe('Note app', () => {
           .contains('make important').click()
 
         cy.contains('a note created from cypress')
-          .contains('make not important')  
+          .contains('make not important')
       })
     })
 
