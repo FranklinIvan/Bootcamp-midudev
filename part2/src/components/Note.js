@@ -5,7 +5,7 @@ export default function Note ({ note, toggleImportance }) {
 
   return (
     <li>
-      <span>{note.content}</span>
+      {note.content}
       <button onClick={toggleImportance}>{label}</button>
     </li>
   )
