@@ -72,9 +72,15 @@ router.put('/:id', userExtractor, (req, res, next) => {
 
   if (!body || Object.keys(body).length === 0) return res.status(400).end()
   if (content !== undefined && (content === '' || content === null)) res.status(400).end()
-  if (important !== undefined && !important) return res.status(400).end()
+  // mejorar el important === false === 0 === string
+  if (important !== undefined && (important === '' || important === null)) return res.status(400).end()
 
-  Note.findByIdAndUpdate(id, body, { new: true })
+  const newNote = {
+    content,
+    important
+  }
+
+  Note.findByIdAndUpdate(id, newNote, { new: true })
     .then(changedNote => {
       if (changedNote) return res.json(changedNote)
       res.status(404).end()
