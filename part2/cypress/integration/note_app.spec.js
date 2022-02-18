@@ -42,21 +42,33 @@ describe('Note app', () => {
 
   describe('when a user logged in', () => {
     beforeEach(() => {
-      cy.request('POST', `${api}/login`, {
-        username: 'midudev',
-        password: '123'
-      }).then(response => {
-        window.localStorage.setItem('loggedNoteAppUser', JSON.stringify(response.body))
-        cy.visit(webSite)
-      })
+      cy.login({username: 'midudev', password: '123'})
     })
 
     it('a new note can be created', () => {
-      const contentNote = 'a new note created from cypress testing'
+      const contentNote = 'a new note created by cypress testing'
       cy.contains('create a note').click()
       cy.get('[placeholder="write your new note"]').type(contentNote)
       cy.contains('save').click()
       cy.contains(contentNote)
+    })
+
+    describe.only('and a note exists', () => {
+      beforeEach(() => {
+        cy.request({
+          method: 'POST',
+          url: `${api}/notes`,
+          body: {content: 'a note created from cypress', important: false},
+          headers: {
+            Authorization: `Bearer ${JSON.parse(localStorage.getItem('loggedNoteAppUser')).token}`
+          }
+        })
+        cy.visit(webSite)
+      })
+
+      it('can be made important', () => {
+        cy.contains('a note created from cypress')
+      })
     })
 
   })
