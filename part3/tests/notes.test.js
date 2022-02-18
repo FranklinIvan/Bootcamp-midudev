@@ -34,7 +34,6 @@ describe.skip('RANDOM', () => {
 
   test('the first note is about midudev', async () => {
     const { contents } = await getAllInfoFromNotes()
-
     expect(contents).toContain(initialNotes[0].content)
   })
 })
@@ -147,7 +146,7 @@ describe.skip('POST', () => {
   })
 })
 
-describe('DELETE', () => {
+describe.skip('DELETE', () => {
   test('delete a random note', async () => {
     const { body: userLogged } = await logIn()
     const { token } = userLogged
@@ -205,7 +204,7 @@ describe('DELETE', () => {
   })
 })
 
-describe.skip('PUT', () => {
+describe('PUT', () => {
   test('modify the content of a note', async () => {
     const { body: userLogged } = await logIn()
     const { token } = userLogged
@@ -226,6 +225,22 @@ describe.skip('PUT', () => {
 
     expect(contents).toContain(newNoteInfo.content)
     expect(notes).toHaveLength(initialNotes.length)
+  })
+
+  test('modify the important of a note', async () => {
+    const { body: userLogged } = await logIn()
+    const { token } = userLogged
+    const newNoteInfo = {
+      important: true
+    }
+    const { body: notes } = await getAllNotes()
+
+    await api
+      .put(`/api/notes/${notes[1].id}`)
+      .send(newNoteInfo)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .expect('Content-type', /application\/json/)
   })
 
   test('modify the content/important of a note w/ undefined fields', async () => {

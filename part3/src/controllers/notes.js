@@ -70,10 +70,13 @@ router.put('/:id', userExtractor, (req, res, next) => {
   const { body } = req
   const { content, important } = body
 
+  console.log({ body })
+
   if (!body || Object.keys(body).length === 0) return res.status(400).end()
+  if (content === undefined && important === undefined) return res.status(405).end()
   if (content !== undefined && (content === '' || content === null)) res.status(400).end()
   // mejorar el important === false === 0 === string
-  if (important !== undefined && (important === '' || important === null)) return res.status(400).end()
+  if (important !== undefined && (typeof important !== 'boolean')) return res.status(400).end()
 
   const newNote = {
     content,
