@@ -1,11 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore } from 'redux'
-import { noteReducer } from './reducers/noteReducer'
+import { createNote, noteReducer, toggleImportanceOf } from './reducers/noteReducer'
 
 const store = createStore(noteReducer)
-
-const generateId = () => Math.floor(Math.random() * 999999) + 1
 
 function App () {
   const state = store.getState()
@@ -16,26 +14,10 @@ function App () {
     const content = target.note.value
     target.note.value = ''
 
-    const payload = {
-      id: generateId(),
-      content,
-      important: Math.random() > 0.5
-    }
-
-    store.dispatch({
-      type: '@note/created',
-      payload
-    })
+    store.dispatch(createNote(content))
   }
 
-  const toggleImportant = id => {
-    store.dispatch({
-      type: '@note/toggle_important',
-      payload: {
-        id
-      }
-    })
-  }
+  const toggleImportant = id => store.dispatch(toggleImportanceOf(id))
 
   return (
     <div>
