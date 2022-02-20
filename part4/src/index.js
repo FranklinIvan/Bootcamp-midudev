@@ -5,31 +5,49 @@ import { noteReducer } from './reducers/noteReducer'
 
 const store = createStore(noteReducer)
 
-store.dispatch({
-  type: '@note/created',
-  payload: {
-    content: 'i love midu classes',
-    important: true,
-    id: 1
-  }
-})
-store.dispatch({
-  type: '@note/created',
-  payload: {
-    content: 'but, im hungry',
-    important: false,
-    id: 2
-  }
-})
+const generateId = () => Math.floor(Math.random() * 999999) + 1
 
 function App () {
   const state = store.getState()
+
+  const addNote = (e) => {
+    e.preventDefault()
+    const {target} = e
+    const content = target.note.value
+    target.note.value = ''
+
+    const payload = {
+      id: generateId(),
+      content,
+      important: Math.random() > 0.5
+    }
+
+    store.dispatch({
+      type: '@note/created',
+      payload
+    })
+  }
+
+  const toggleImportant = id => {
+    store.dispatch({
+      type: '@note/toggle_important',
+      payload: {
+        id
+      }
+    })
+  }
+
   return (
-    <ul>
+    <div>
+      <form onSubmit={addNote}>
+        <input type='text' name='note'/>
+        <button>save</button>
+      </form>
+      <ul>
       {
         state.map(note => {
           return (
-            <li key={note.id}>
+            <li key={note.id} onClick={() => toggleImportant(note.id)}>
               {note.content}
               <strong>{note.important ? ' important' : ' not important'}</strong>
             </li>
@@ -37,6 +55,7 @@ function App () {
         })
       }
     </ul>
+    </div>
   )
 }
 
