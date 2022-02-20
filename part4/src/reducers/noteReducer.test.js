@@ -1,3 +1,4 @@
+import deepFreeze from 'deep-freeze'
 import { noteReducer } from './noteReducer'
 
 describe('noteReducer', () => {
@@ -22,6 +23,7 @@ describe('noteReducer', () => {
       }
     }
 
+    deepFreeze(state)
     const newState = noteReducer(state, action)
 
     expect(newState).toHaveLength(2)
