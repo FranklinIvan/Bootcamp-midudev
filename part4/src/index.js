@@ -1,14 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 import { createStore } from 'redux'
-
-const noteReducer = (state = [], action) => {
-  if (action.type === '@note/created'){
-   return state.concat(action.payload)
-  }
-
-  return state
-}
+import { noteReducer } from './reducers/noteReducer'
 
 const store = createStore(noteReducer)
 
@@ -48,10 +41,10 @@ function App () {
 }
 
 const renderApp = () => {
-ReactDOM.render(
-  <App />,
-  document.getElementById('root')
-);
+  ReactDOM.render(
+    <App />,
+    document.getElementById('root')
+  )
 }
 
 renderApp()
