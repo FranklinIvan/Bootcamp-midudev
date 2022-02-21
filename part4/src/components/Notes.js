@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { toggleImportanceOf } from '../reducers/noteReducer'
 
 export default function Notes () {
-  const notes = useSelector(state => state)
+  const notes = useSelector(state => state.notes)
   const dispatch = useDispatch()
 
   const toggleImportant = id => dispatch(toggleImportanceOf(id))
