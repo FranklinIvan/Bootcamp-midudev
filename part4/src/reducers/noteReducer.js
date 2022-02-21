@@ -27,7 +27,7 @@ export const createNote = content => {
     payload: {
       id: generateId(),
       content,
-      important: Math.random() > 0.5 
+      important: Math.random() > 0.5
     }
   }
 }
