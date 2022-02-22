@@ -1,17 +1,4 @@
-const INITIAL_STATE = [
-  {
-    content: 'hi, my name is franklon',
-    important: false,
-    id: 1
-  },
-  {
-    content: 'i really like working very much!!',
-    important: true,
-    id: 2
-  },
-]
-
-export const noteReducer = (state = INITIAL_STATE, { type, payload }) => {
+export const noteReducer = (state = [], { type, payload }) => {
   if (type === '@note/created') {
     return [...state, payload]
   }
