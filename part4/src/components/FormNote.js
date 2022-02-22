@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { createNote } from '../reducers/noteReducer'
 
-export default function NewNote () {
+export default function FormNote () {
   const dispatch = useDispatch()
 
   const addNote = e => {
