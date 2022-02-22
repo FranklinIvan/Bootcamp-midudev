@@ -11,13 +11,13 @@
       "id": 2
     },
     {
-      "content": "backend facck!",
-      "important": true,
+      "content": "im not sure about export vs export default",
+      "important": false,
       "id": 3
     },
     {
-      "content": "backend works w/ id, like a whatt!!",
-      "important": true,
+      "content": "midu is using export, and im using export default like a boss",
+      "important": false,
       "id": 4
     }
   ]

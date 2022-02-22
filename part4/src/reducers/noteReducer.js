@@ -1,3 +1,5 @@
+import notesServices from '../services/notes'
+
 export const noteReducer = (state = [], { type, payload }) => {
   if (type === '@note/init') {
     return payload
@@ -39,9 +41,13 @@ export const toggleImportanceOf = id => {
   }
 }
 
-export const initNotes = notes => {
-  return {
-    type: '@note/init',
-    payload: notes
+export const initNotes = () => {
+  return async dispatch => {
+    const notes = await notesServices.getAllNotes()
+
+    dispatch ({
+      type: '@note/init',
+      payload: notes
+    })
   }
 }

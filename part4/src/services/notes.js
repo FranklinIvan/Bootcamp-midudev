@@ -7,8 +7,6 @@ const getAllNotes = async () => {
   return response.data
 }
 
-// const generateId = () => Math.floor(Math.random() * 999999) + 1
-
 const createNewNote = async content => {
   const newNote = {
     content,
