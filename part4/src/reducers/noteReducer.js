@@ -1,4 +1,8 @@
 export const noteReducer = (state = [], { type, payload }) => {
+  if (type === '@note/init') {
+    return payload
+  }
+
   if (type === '@note/created') {
     return [...state, payload]
   }
@@ -38,5 +42,12 @@ export const toggleImportanceOf = id => {
     payload: {
       id
     }
+  }
+}
+
+export const initNotes = notes => {
+  return {
+    type: '@note/init',
+    payload: notes
   }
 }
