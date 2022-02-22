@@ -1,0 +1,19 @@
+{
+  "notes": [
+    {
+      "content": "hi, my name is franklon",
+      "important": false,
+      "id": 1
+    },
+    {
+      "content": "i really like working very much!!",
+      "important": true,
+      "id": 2
+    },
+    {
+      "content": "backend facck!",
+      "important": true,
+      "id": 3
+    }
+  ]
+}
