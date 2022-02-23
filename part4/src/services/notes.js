@@ -7,6 +7,13 @@ const getAllNotes = async () => {
   return response.data
 }
 
+const getOneNote = async id => {
+  const notes = await getAllNotes()
+  const note = notes.find(n => n.id === id)
+
+  return note
+}
+
 const createNewNote = async content => {
   const newNote = {
     content,
@@ -17,4 +24,16 @@ const createNewNote = async content => {
   return response.data
 }
 
-export default { getAllNotes, createNewNote } // eslint-disable-line
+const toggleImportanceOf = async id => {
+
+  const note = await getOneNote(id)
+  const newNote = {
+    ...note,
+    important: !note.important
+  }
+
+  const response = await axios.put(`${baseUrl}/${id}`, newNote)
+  return response.data
+}
+
+export default { getAllNotes, createNewNote, toggleImportanceOf } // eslint-disable-line

@@ -2,7 +2,7 @@
   "notes": [
     {
       "content": "hi, my name is franklon",
-      "important": false,
+      "important": true,
       "id": 1
     },
     {
@@ -11,14 +11,9 @@
       "id": 2
     },
     {
-      "content": "im not sure about export vs export default",
-      "important": false,
+      "content": "bro, thursday, im crazy!!",
+      "important": true,
       "id": 3
-    },
-    {
-      "content": "midu is using export, and im using export default like a boss",
-      "important": false,
-      "id": 4
     }
   ]
 }

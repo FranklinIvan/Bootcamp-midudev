@@ -7,7 +7,7 @@ export default function Notes () {
   const notes = useSelector(state => state.notes)
   const filter = useSelector(state => state.filter)
 
-  const toggleImportant = id => dispatch(toggleImportanceOf(id))
+  const toggleImportant = async id => dispatch(toggleImportanceOf(id))
 
   const notesToShow = notes.filter(notes => {
     if (filter === 'all') return notes

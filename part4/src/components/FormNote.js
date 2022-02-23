@@ -1,6 +1,5 @@
 import { useDispatch } from 'react-redux'
 import { createNote } from '../reducers/noteReducer'
-import notesServices from '../services/notes'
 
 export default function FormNote () {
   const dispatch = useDispatch()
@@ -10,10 +9,8 @@ export default function FormNote () {
     const { target } = e
     const content = target.note.value
     target.note.value = ''
-
-    const newNote = await notesServices.createNewNote(content)
-
-    dispatch(createNote(newNote))
+    
+    dispatch(createNote(content))
   }
 
   return (

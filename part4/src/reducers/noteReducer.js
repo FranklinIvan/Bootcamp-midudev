@@ -25,20 +25,28 @@ export const noteReducer = (state = [], { type, payload }) => {
   return state
 }
 
-export const createNote = note => {
-  return {
-    type: '@note/created',
-    payload: note
+export const createNote = content => {
+  return async dispatch => {
+    const newNote = await notesServices.createNewNote(content)
+
+    dispatch({
+      type: '@note/created',
+      payload: newNote
+    })
   }
+  
 }
 
 export const toggleImportanceOf = id => {
-  return {
-    type: '@note/toggle_important',
-    payload: {
-      id
-    }
+  return async dispatch => {
+    await notesServices.toggleImportanceOf(id)
+
+    dispatch({
+      type: '@note/toggle_important',
+      payload: { id }
+    })
   }
+  
 }
 
 export const initNotes = () => {
