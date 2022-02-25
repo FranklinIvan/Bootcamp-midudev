@@ -32,4 +32,4 @@ const update = (id, newObject) => {
   return request.then(response => response.data)
 }
 
-export default { setToken, getAll, create, update }
+export default { setToken, getAll, create, update } //eslint-disable-line

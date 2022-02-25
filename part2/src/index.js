@@ -50,11 +50,11 @@ function App () {
       )
       .catch(error => {
         console.log(error)
-        setErrorMessage(`Note '${note.content}' was already removed from server`)
+        setErrorMessage(`Error: Note '${note.content}' ${error.message}`)
         
         setTimeout(() => {
           setErrorMessage(null)
-        }, 5000)
+        }, 6000)
       })
   }
 
