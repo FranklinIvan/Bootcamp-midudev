@@ -1,50 +1,21 @@
 import './App.css'
-import { useEffect, useState } from 'react'
-import noteService from './services/notes'
+import { useState } from 'react'
 import RenderCreateNoteForm from './components/NoteForm'
 import Note from './components/Note'
+import { useUser } from './hooks/useUser'
+import { useNotes } from './hooks/useNotes'
 
-export default function App () {
-  const [notes, setNotes] = useState([])
+export default function Notes () {
+  const { user, logout } = useUser()
+  const { notes, addNote, toggleImportance } = useNotes()
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
-  const [user, setUser] = useState(null)
 
-  useEffect(() => {
-    noteService.getAll().then(initialNotes => setNotes(initialNotes))
-  }, [])
-
-  useEffect(() => {
-    const loggedUser = window.localStorage.getItem('loggedNoteAppUser')
-    if (loggedUser) {
-      const user = JSON.parse(loggedUser)
-      setUser(user)
-      noteService.setToken(user.token)
-    }
-  }, [])
-
-  const addNote = noteObject => {
-    noteService
-      .create(noteObject)
-      .then(newNote => setNotes(prevNotes => prevNotes.concat(newNote)))
-  }
-
-  const toggleImportance = id => {
-
-    const note = notes.find(n => n.id === id)
-    const changedNote = {
-      ...note,
-      important: !note.important
-    }
-
-    noteService
-      .update(id, changedNote)
-      .then(changedNote => 
-        setNotes(notes.map(note => note.id === id ? changedNote : note))
-      )
+  const toggleImportanceOfNote = id => {
+    toggleImportance(id) // comes from custom hook
       .catch(error => {
         console.log(error)
-        setErrorMessage(`Error: Note '${note.content}' ${error.message}`)
+        setErrorMessage('Error with note...')
         
         setTimeout(() => {
           setErrorMessage(null)
@@ -54,12 +25,6 @@ export default function App () {
 
   const handleShowNotes = () => setShowAll(prev => !prev)
   const notesToShow = showAll ? notes : notes.filter(n => n.important === true)
-
-  const handleLogout = () => {
-    setUser(null)
-    noteService.setToken(null)
-    window.localStorage.removeItem('loggedNoteAppUser')
-  }
 
   return (
     <div>
@@ -72,7 +37,7 @@ export default function App () {
 
           : <RenderCreateNoteForm
               addNote={addNote}
-              handleLogout={handleLogout}
+              handleLogout={logout}
             />
       }
 
@@ -87,7 +52,7 @@ export default function App () {
               <Note
                 key={note.id}
                 note={note}
-                toggleImportance={() => toggleImportance(note.id)}
+                toggleImportance={() => toggleImportanceOfNote(note.id)}
               />
             )
         }

@@ -12,8 +12,16 @@ export const useUser = () => {
         noteService.setToken(user.token)
       }
     }, [])
+
+    
+  const logout = () => {
+    setUser(null)
+    noteService.setToken(null)
+    window.localStorage.removeItem('loggedNoteAppUser')
+  }
   
     return {
-      user
+      user,
+      logout
     }
 }

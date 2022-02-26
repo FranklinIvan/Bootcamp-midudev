@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
-import noteService from './services/notes'
 import NoteDetail from "./components/NoteDetail";
 import Notes from './Notes'
 import Login from "./Login";
 import { useUser } from "./hooks/useUser";
+import { useNotes } from "./hooks/useNotes";
 
 const Home = () => <h1>Home</h1>
 const Users = () => <h1>Users</h1>
@@ -14,12 +14,8 @@ const inlinesStyles = {
 }
 
 function App() {
-  const [notes, setNotes] = useState([])
+  const { notes } = useNotes()
   const { user } = useUser() // eslint-disable-line
-
-  useEffect(() => {
-    noteService.getAll().then(initialNotes => setNotes(initialNotes))
-  }, [])
 
   return (
     <BrowserRouter>
