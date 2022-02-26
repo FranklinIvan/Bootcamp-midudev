@@ -1,12 +1,10 @@
 import './App.css'
 import { useEffect, useState } from 'react'
 import noteService from './services/notes'
-import loginService from './services/login'
 import RenderCreateNoteForm from './components/NoteForm'
-import RenderLoginForm from './components/LoginForm'
 import Note from './components/Note'
 
-function App () {
+export default function App () {
   const [notes, setNotes] = useState([])
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
@@ -57,23 +55,6 @@ function App () {
   const handleShowNotes = () => setShowAll(prev => !prev)
   const notesToShow = showAll ? notes : notes.filter(n => n.important === true)
 
-  const handleLogin = async credentials => {
-    try {
-      const user = await loginService.login(credentials)
-      setUser(user)
-
-      window.localStorage.setItem('loggedNoteAppUser', JSON.stringify(user))
-      noteService.setToken(user.token)
-    } catch (error) {
-      console.error(error)
-      setErrorMessage('wrong credentials')
-
-      setTimeout(() => {
-        setErrorMessage('')
-      }, 5000)
-    }
-  }
-
   const handleLogout = () => {
     setUser(null)
     noteService.setToken(null)
@@ -87,9 +68,7 @@ function App () {
 
       {
         user === null
-          ? <RenderLoginForm
-              handleLogin={handleLogin}
-            />
+          ? <>you must log in to create notes <br /></>
 
           : <RenderCreateNoteForm
               addNote={addNote}
@@ -117,5 +96,3 @@ function App () {
     </div>
   )
 }
-
-export default App

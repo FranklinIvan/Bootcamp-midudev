@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import Toggleable from './Toggleable'
 import PropTypes from 'prop-types'
 
 export default function RenderLoginForm ({ handleLogin }) {
@@ -22,7 +21,8 @@ export default function RenderLoginForm ({ handleLogin }) {
   }
 
   return (
-    <Toggleable labelButton='show log in'>
+    <div>
+      <h1>Login</h1>
       <form onSubmit={handleSubmit}>
         <input
           type='text'
@@ -40,7 +40,7 @@ export default function RenderLoginForm ({ handleLogin }) {
         <br />
         <br />
       </form>
-    </Toggleable>
+    </div>
   )
 }
 
