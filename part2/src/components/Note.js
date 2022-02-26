@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 export default function Note ({ note, toggleImportance }) {
   const label = note.important
     ? 'make not important'
@@ -5,7 +7,9 @@ export default function Note ({ note, toggleImportance }) {
 
   return (
     <li>
-      {note.content}
+      <Link to={`/notes/${note.id}`}>
+        {note.content}
+      </Link>
       <button onClick={toggleImportance}>{label}</button>
     </li>
   )
