@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
+import Notes from './Notes'
 
 const Home = () => <h1>Home</h1>
-
-const Notes = () => <h1>Notes</h1>
-
 const Users = () => <h1>Users</h1>
 
 const inlinesStyles = {
@@ -11,40 +10,29 @@ const inlinesStyles = {
 }
 
 function App() {
-  const [page, setPage] = useState(() => {
-    const { pathname } = window.location
-    const page = pathname.slice(1)
-    return page
-  })
-  
-  const handlePages = () => {
-    if (page === 'notes') return <Notes />
-    else if (page === 'users') return <Users />
-    else return <Home />
-  }
-
-  const toPage = page => e => {
-    e.preventDefault()
-
-    window.history.pushState(null, '', `${page}`)
-    setPage(page)
-  }
 
   return (
-    <div>
+    <BrowserRouter>
+      
       <header>
-        <a href="#" onClick={toPage('home')} style={inlinesStyles}> {/* eslint-disable-line */}
+        <Link to="/" style={inlinesStyles}>
           Home
-        </a>
-        <a href="#" onClick={toPage('notes')} style={inlinesStyles}> {/* eslint-disable-line */}
+        </Link>
+        <Link to="/notes"  style={inlinesStyles}>
           Notes
-        </a>
-        <a href="#" onClick={toPage('users')} style={inlinesStyles}> {/* eslint-disable-line */}
+        </Link>
+        <Link to="/users"  style={inlinesStyles}>
           Users
-        </a>
+        </Link>
       </header>
-      {handlePages()}
-    </div>
+
+      <Routes>
+        <Route path='/' element={ <Home /> } /> 
+        <Route path='/notes' element={ <Notes /> } /> 
+        <Route path='/users' element={ <Users /> } /> 
+      </Routes>
+      
+    </BrowserRouter>
   )
 }
 

@@ -2,8 +2,6 @@ import './App.css'
 import { useEffect, useState } from 'react'
 import noteService from './services/notes'
 import loginService from './services/login'
-
-// components
 import RenderCreateNoteForm from './components/NoteForm'
 import RenderLoginForm from './components/LoginForm'
 import Note from './components/Note'
