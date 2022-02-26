@@ -4,9 +4,10 @@ import loginService from './services/login'
 import RenderLoginForm from "./components/LoginForm"
 
 export default function Login() {
-  const [user, setUser] = useState(null)
-
-  console.log(user)
+  const [user, setUser] = useState(null) // eslint-disable-line
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
   
   useEffect(() => {
     const loggedUser = window.localStorage.getItem('loggedNoteAppUser')
@@ -17,17 +18,42 @@ export default function Login() {
     }
   }, [])
 
-  const handleLogin = async credentials => {
-    try {
-      const user = await loginService.login(credentials)
-      setUser(user)
+  const handleLogin = async e => {
+    e.preventDefault()
 
+    try {
+      const user = await loginService.login({
+        username,
+        password
+      })
       window.localStorage.setItem('loggedNoteAppUser', JSON.stringify(user))
+      setUser(user)
       noteService.setToken(user.token)
+
+      setUsername('')
+      setPassword('')
+      
     } catch (error) {
-      console.error(error)
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
   }
 
-  return <RenderLoginForm handleLogin={handleLogin} />
+  if (errorMessage) return <p>{errorMessage}</p>
+
+  return(
+    <RenderLoginForm 
+      handleSubmit={handleLogin}
+      username={username}
+      password={password}
+      handleUsernameChange={
+        ({target}) => setUsername(target.value)
+      }
+      handlePasswordChange={
+        ({ target }) => setPassword(target.value)
+      }
+    />
+  )
 }
