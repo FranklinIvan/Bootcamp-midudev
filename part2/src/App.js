@@ -14,9 +14,19 @@ const inlinesStyles = {
 
 function App() {
   const [notes, setNotes] = useState([])
+  const [user, setUser] = useState(null) // eslint-disable-line
 
   useEffect(() => {
     noteService.getAll().then(initialNotes => setNotes(initialNotes))
+  }, [])
+
+  useEffect(() => {
+    const loggedUser = window.localStorage.getItem('loggedNoteAppUser')
+    if (loggedUser) {
+      const user = JSON.parse(loggedUser)
+      setUser(user)
+      noteService.setToken(user.token)
+    }
   }, [])
 
   return (
@@ -26,7 +36,11 @@ function App() {
         <Link to="/" style={inlinesStyles}>Home</Link>
         <Link to="/notes"  style={inlinesStyles}>Notes</Link>
         <Link to="/users"  style={inlinesStyles}>Users</Link>
-        <Link to="/login"  style={inlinesStyles}>Login</Link>
+        {
+          user
+            ? <em> {user.username} is logged in</em>
+            : <Link to="/login"  style={inlinesStyles}>Login</Link>
+        }
       </header>
 
       <Routes>
@@ -34,7 +48,7 @@ function App() {
         <Route path='/notes' element={ <Notes /> } /> 
         <Route path='/notes/:id' element={ <NoteDetail notes={notes}/> } /> 
         <Route path='/users' element={ <Users /> } /> 
-        <Route path='/login' element={ <Login /> } /> 
+        <Route path='/login' element={ <Login /> } />
       </Routes>
       
     </BrowserRouter>

@@ -2,8 +2,11 @@ import { useEffect, useState } from "react"
 import noteService from './services/notes'
 import loginService from './services/login'
 import RenderLoginForm from "./components/LoginForm"
+import { useNavigate } from 'react-router-dom'
 
 export default function Login() {
+  const navigate = useNavigate()
+
   const [user, setUser] = useState(null) // eslint-disable-line
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -32,16 +35,18 @@ export default function Login() {
 
       setUsername('')
       setPassword('')
-      
+      navigate('/notes')
+
     } catch (error) {
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000)
+      }, 2000)
     }
   }
 
   if (errorMessage) return <p>{errorMessage}</p>
+  if (user) return <p>you are logged in</p>
 
   return(
     <RenderLoginForm 
