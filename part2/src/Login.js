@@ -14,7 +14,7 @@ export default function Login() {
     e.preventDefault()
 
     try {
-      login({username, password})
+      await login({username, password})
       setUsername('')
       setPassword('')
       navigate('/notes')
