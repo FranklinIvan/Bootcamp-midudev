@@ -1,9 +1,9 @@
 import './App.css'
 import { useState } from 'react'
-import RenderCreateNoteForm from './components/NoteForm'
-import Note from './components/Note'
 import { useUser } from './hooks/useUser'
 import { useNotes } from './hooks/useNotes'
+import RenderCreateNoteForm from './components/NoteForm'
+import Note from './components/Note'
 
 export default function Notes () {
   const { user, logout } = useUser()
@@ -15,11 +15,11 @@ export default function Notes () {
     toggleImportance(id) // comes from custom hook
       .catch(error => {
         console.log(error)
-        setErrorMessage('Error with note...')
+        setErrorMessage('An error has ocurred with note')
         
         setTimeout(() => {
           setErrorMessage(null)
-        }, 6000)
+        }, 3000)
       })
   }
 
@@ -35,10 +35,14 @@ export default function Notes () {
         user === null
           ? <>you must log in to create notes <br /></>
 
-          : <RenderCreateNoteForm
-              addNote={addNote}
-              handleLogout={logout}
-            />
+          : <>
+              <RenderCreateNoteForm
+                addNote={addNote}
+              />
+              <div>
+                <button onClick={logout}>log out</button>
+              </div>
+            </>
       }
 
       <button onClick={handleShowNotes}>

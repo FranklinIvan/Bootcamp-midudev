@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import Toggleable from './Toggleable'
 
-export default function RenderCreateNoteForm ({ addNote, handleLogout }) {
+export default function RenderCreateNoteForm ({ addNote }) {
   const [newNote, setNewNote] = useState('')
   const toggleRef = useRef()
 
@@ -11,7 +11,7 @@ export default function RenderCreateNoteForm ({ addNote, handleLogout }) {
 
     const noteObject = {
       content: newNote,
-      important: false
+      important: Math.random() > 0.5
     }
     addNote(noteObject)
     setNewNote('')
@@ -31,10 +31,6 @@ export default function RenderCreateNoteForm ({ addNote, handleLogout }) {
         <button>save</button>
       </form>
       <br />
-      <div>
-        <button onClick={handleLogout}>log out</button>
-      </div>
     </Toggleable>
-
   )
 }

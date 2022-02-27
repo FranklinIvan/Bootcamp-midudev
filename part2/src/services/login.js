@@ -6,4 +6,4 @@ const login = async credentials => {
   return data
 }
 
-export default { login }
+export default { login } // eslint-disable-line

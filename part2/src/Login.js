@@ -1,38 +1,20 @@
-import { useEffect, useState } from "react"
-import noteService from './services/notes'
-import loginService from './services/login'
-import RenderLoginForm from "./components/LoginForm"
+import { useState } from "react"
 import { useNavigate } from 'react-router-dom'
+import { useUser } from "./hooks/useUser"
+import RenderLoginForm from "./components/LoginForm"
 
 export default function Login() {
   const navigate = useNavigate()
-
-  const [user, setUser] = useState(null) // eslint-disable-line
+  const { user, login } = useUser()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
-  
-  useEffect(() => {
-    const loggedUser = window.localStorage.getItem('loggedNoteAppUser')
-    if (loggedUser) {
-      const user = JSON.parse(loggedUser)
-      setUser(user)
-      noteService.setToken(user.token)
-    }
-  }, [])
 
   const handleLogin = async e => {
     e.preventDefault()
 
     try {
-      const user = await loginService.login({
-        username,
-        password
-      })
-      window.localStorage.setItem('loggedNoteAppUser', JSON.stringify(user))
-      setUser(user)
-      noteService.setToken(user.token)
-
+      login({username, password})
       setUsername('')
       setPassword('')
       navigate('/notes')

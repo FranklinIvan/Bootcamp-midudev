@@ -2,7 +2,8 @@ import { useEffect, useState } from "react"
 import noteService from '../services/notes'
 
 export const useNotes = () => {
-  const [notes, setNotes] = useState([]) // eslint-disable-line
+  const [notes, setNotes] = useState([])
+  
   useEffect(() => {
     noteService.getAll().then(initialNotes => setNotes(initialNotes))
   }, [])
@@ -13,19 +14,15 @@ export const useNotes = () => {
       .then(newNote => setNotes(prevNotes => prevNotes.concat(newNote)))
   }
 
-  const toggleImportance = id => {
-
+  const toggleImportance = async id => {
     const note = notes.find(n => n.id === id)
-    const changedNote = {
+    const noteToChange = {
       ...note,
       important: !note.important
     }
 
-    return noteService
-      .update(id, changedNote)
-      .then(changedNote => 
-        setNotes(notes.map(note => note.id === id ? changedNote : note))
-      )
+    const changedNote = await noteService.update(id, noteToChange)
+    return setNotes(notes.map(note => note.id === id ? changedNote : note))
   }
 
   return {
