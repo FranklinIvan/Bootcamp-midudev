@@ -1,4 +1,3 @@
-import { Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
 
 export default function Note ({ note, toggleImportance }) {
@@ -7,15 +6,13 @@ export default function Note ({ note, toggleImportance }) {
     : 'make important'
 
   return (
-    <>
-      <td>
+    <div>
+      <li>
         <Link to={`/notes/${note.id}`}>
           {note.content}
         </Link>
-      </td>
-      <td>
-        <Button onClick={toggleImportance}>{label}</Button>
-      </td>
-    </>
+        <button onClick={toggleImportance}>{label}</button>
+      </li>
+    </div>
   )
 }
