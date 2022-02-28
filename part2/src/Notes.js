@@ -5,6 +5,7 @@ import { useNotes } from './hooks/useNotes'
 import RenderCreateNoteForm from './components/NoteForm'
 import Note from './components/Note'
 import Table from 'react-bootstrap/Table'
+import { Button } from 'react-bootstrap'
 
 export default function Notes () {
   const { user, logout } = useUser()
@@ -41,14 +42,14 @@ export default function Notes () {
                 addNote={addNote}
               />
               <div>
-                <button onClick={logout}>log out</button>
+                <Button variant='danger' onClick={logout}>log out</Button>
               </div>
             </>
       }
 
-      <button onClick={handleShowNotes}>
+      <Button variant='info' onClick={handleShowNotes}>
         {showAll ? 'show only important' : 'show all'}
-      </button>
+      </Button>
 
       <Table striped>
         <tbody>
