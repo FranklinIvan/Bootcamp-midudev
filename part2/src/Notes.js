@@ -4,6 +4,7 @@ import { useUser } from './hooks/useUser'
 import { useNotes } from './hooks/useNotes'
 import RenderCreateNoteForm from './components/NoteForm'
 import Note from './components/Note'
+import Table from 'react-bootstrap/Table'
 
 export default function Notes () {
   const { user, logout } = useUser()
@@ -49,18 +50,22 @@ export default function Notes () {
         {showAll ? 'show only important' : 'show all'}
       </button>
 
-      <ol>
-        {
-          notesToShow
-            .map(note =>
-              <Note
-                key={note.id}
-                note={note}
-                toggleImportance={() => toggleImportanceOfNote(note.id)}
-              />
-            )
-        }
-      </ol>
+      <Table striped>
+        <tbody>
+          {
+            notesToShow
+              .map(note =>
+                <tr key={note.id}>
+                  <Note
+                    key={note.id}
+                    note={note}
+                    toggleImportance={() => toggleImportanceOfNote(note.id)}
+                  />
+                </tr>
+              )
+          }
+        </tbody>
+      </Table>
 
     </div>
   )

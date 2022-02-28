@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
+import { Link, Route, Routes } from 'react-router-dom'
 import NoteDetail from "./components/NoteDetail";
 import Notes from './Notes'
 import Login from "./Login";
@@ -13,8 +13,7 @@ const inlinesStyles = {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      
+    <div className="container">
       <header>
         <Link to="/" style={inlinesStyles}>Home</Link>
         <Link to="/notes"  style={inlinesStyles}>Notes</Link>
@@ -29,7 +28,6 @@ export default function App() {
         <Route path='/users' element={ <Users /> } />
         <Route path='/login' element={ <Login /> } />
       </Routes>
-      
-    </BrowserRouter>
+    </div>
   )
 }

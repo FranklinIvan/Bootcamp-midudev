@@ -6,11 +6,15 @@ export default function Note ({ note, toggleImportance }) {
     : 'make important'
 
   return (
-    <li>
-      <Link to={`/notes/${note.id}`}>
-        {note.content}
-      </Link>
-      <button onClick={toggleImportance}>{label}</button>
-    </li>
+    <>
+      <td>
+        <Link to={`/notes/${note.id}`}>
+          {note.content}
+        </Link>
+      </td>
+      <td>
+        <button onClick={toggleImportance}>{label}</button>
+      </td>
+    </>
   )
 }
