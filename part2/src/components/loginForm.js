@@ -4,7 +4,7 @@ export default function RenderLoginForm ({ handleSubmit, ...props }) {
   return (
     <div>
       <h1>Login</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <input
           type='text'
           onChange={props.handleUsernameChange}
@@ -18,6 +18,7 @@ export default function RenderLoginForm ({ handleSubmit, ...props }) {
           value={props.password}
           placeholder='password'
         />
+
         <button id='form-login-button'>log in</button>
       </form>
     </div>
