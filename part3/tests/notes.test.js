@@ -1,6 +1,6 @@
 const Note = require('../src/models/Note')
 const { connection } = require('mongoose')
-const { server } = require('../index')
+const { server } = require('../src/index')
 const {
   api,
   initialNotes,
@@ -19,7 +19,7 @@ beforeEach(async () => {
   }
 })
 
-describe.skip('RANDOM', () => {
+describe('RANDOM', () => {
   test('notes are returned as json', async () => {
     await api
       .get('/api/notes')
@@ -38,7 +38,7 @@ describe.skip('RANDOM', () => {
   })
 })
 
-describe.skip('POST', () => {
+describe('POST', () => {
   test('a valid note added', async () => {
     const { body: userLogged } = await logIn()
     const { token } = userLogged
@@ -146,7 +146,7 @@ describe.skip('POST', () => {
   })
 })
 
-describe.skip('DELETE', () => {
+describe('DELETE', () => {
   test('delete a random note', async () => {
     const { body: userLogged } = await logIn()
     const { token } = userLogged

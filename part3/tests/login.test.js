@@ -1,4 +1,4 @@
-const { server } = require('../index')
+const { server } = require('../src/index')
 const { connection } = require('mongoose')
 const {
   api,

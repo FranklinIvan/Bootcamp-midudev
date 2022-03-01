@@ -1,5 +1,5 @@
 const supertest = require('supertest')
-const { app } = require('../index')
+const { app } = require('../src/index')
 const api = supertest(app)
 
 // notes

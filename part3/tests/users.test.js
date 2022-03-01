@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const User = require('../src/models/User')
 const { connection } = require('mongoose')
-const { server } = require('../index')
+const { server } = require('../src/index')
 const {
   api,
   initialUsers,
