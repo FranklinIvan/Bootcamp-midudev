@@ -1,5 +1,5 @@
-Part 2: Notes App
+# Part 2: Notes App
 
-notes app development, following the `full stack open` and `midudev tutorial on youtube`.
+Notes App development, following the `full stack open` and `midudev tutorial on youtube`.
 
-in the `indexs folder` there are a couple of exercises of `full stack open` but i decided to continue w/ the Notes App and stop doing exercises
+in the `indexs folder` there are a couple of exercises of `full stack open` but i decided to continue w/ the Notes App and stop doing exercises.

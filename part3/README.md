@@ -1,3 +1,4 @@
-Part 3: Notes API
+# Part 3: Notes API
 
-notes api development, following `midudev tutorial on youtube`.
+Notes API development, following `midudev tutorial on youtube`.
+This is the backend of **Notes APP (part2)**.
