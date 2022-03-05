@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
-import {ApolloClient, HttpLink, InMemoryCache, gql} from '@apollo/client'
+import {ApolloClient, HttpLink, InMemoryCache, ApolloProvider} from '@apollo/client'
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
@@ -11,26 +11,9 @@ const client = new ApolloClient({
   })
 })
 
-const query = gql`
-  query {
-    allPersons {
-      id
-      name
-      phone
-      address {
-        street
-        city
-      }
-    }
-  }
-`
-
-client.query({ query })
-  .then(res => console.log(res.data))
-
 ReactDOM.render(
-  <React.StrictMode>
+  <ApolloProvider client={client}>
     <App />
-  </React.StrictMode>,
+  </ApolloProvider>,
   document.getElementById('root')
 )
