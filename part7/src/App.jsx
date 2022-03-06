@@ -5,7 +5,7 @@ import { Persons } from './components/Persons'
 
 const ALL_PERSONS = gql`
   query {
-    allPersons {
+    allPersons(phone: YES) {
       id
       name
       phone
