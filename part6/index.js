@@ -1,29 +1,5 @@
-import {ApolloServer, gql, UserInputError} from 'apollo-server'
-import {v1 as uuid} from 'uuid'
-import axios from 'axios'
-
-const persons = [
-  {
-    name: 'Franko',
-    phone: '09-1235-212',
-    street: 'Lovesno',
-    city: 'NY city',
-    id: '295d9ddb-1bf0-410b-9c3d-094ec7e0d22d'
-  },
-  {
-    name: 'Midudev',
-    phone: '87-1214-233',
-    street: 'Morato',
-    city: 'Barcelona',
-    id: '1f3a7334-4cb3-4bf9-8196-313e13577e6d'
-  },
-  {
-    name: 'Cristiano',
-    street: 'DuMundo',
-    city: 'Portugalo City',
-    id: '7f8b744c-ed7e-4643-baa8-612a9671018b'
-  }
-]
+import { ApolloServer, gql, UserInputError } from 'apollo-server'
+import personsServices from './services/persons.js'
 
 const typeDefs = gql`
   enum YesNo {
@@ -65,42 +41,48 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    personCount: () => persons.length,
+    personCount: async () => {
+      const persons = await personsServices.getAllPersons()
+      return persons.length
+    },
     allPersons: async (root, args) => {
-      const {data: personsAPI} = await axios.get('http://localhost:3000/persons')
-      if (!args.phone) return personsAPI
+      const persons = await personsServices.getAllPersons()
+      if (!args.phone) return persons
 
       const byPhone = person => {
-        return args.phone === 'YES' ? person.phone : !person.phone
+        return person.phone
       }
 
-      return personsAPI.filter(byPhone)
+      return persons.filter(byPhone)
     },
-    findPerson: (root, args) => {
-      const {name} = args
-      return persons.find(person => person.name === name)
+    findPerson: async (root, args) => {
+      const person = await personsServices.getOnePerson(args.name)
+      return person
     }
   },
   Mutation: {
-    addPerson: (root, args) => {
-      if (persons.find(p => p.name === args.name)) {
+    addPerson: async (root, args) => {
+      const person = await personsServices.getOnePerson(args.name)
+
+      if (person) {
         throw new UserInputError('Name must be unique', {
           invalidArgs: args.name
         })
       }
-      const person = {...args, id: uuid()}
-      persons.push(person)
-      return person
+      const newPerson = await personsServices.addNewPerson(args)
+      return newPerson
     },
-    editNumber: (root, args) => {
-      const personIndex = persons.findIndex(p => p.name === args.name)
-      if (personIndex === -1) return null
+    editNumber: async (root, args) => {
+      const person = await personsServices.getOnePerson(args.name)
 
-      const person = persons[personIndex]
+      if (typeof person === 'undefined') {
+        throw new UserInputError('Name not found', {
+          invalidArgs: args.name
+        })
+      }
 
-      const updatedPerson = {...person, phone: args.phone}
-      persons[personIndex] = updatedPerson
-      return updatedPerson
+      const editedNumber = await personsServices.uptadePerson(args)
+      return editedNumber
     }
   },
   Person: {
@@ -118,6 +100,6 @@ const server = new ApolloServer({
   resolvers
 })
 
-server.listen().then(({url}) => {
+server.listen().then(({ url }) => {
   console.log(`server ready at ${url}`)
 })
