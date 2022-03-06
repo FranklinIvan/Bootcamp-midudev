@@ -17,6 +17,10 @@
     "axios": "0.26.0",
     "graphql": "16.3.0",
     "json-server": "0.17.0",
+    "standard": "16.0.4",
     "uuid": "8.3.2"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/standard/eslintrc.json"
   }
 }
