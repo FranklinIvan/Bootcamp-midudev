@@ -15,28 +15,30 @@ const FIND_PERSON = gql`
 `
 
 export const Persons = ({ persons }) => {
-  const [getPerson, result] = useLazyQuery(FIND_PERSON)
+  const [getPerson, {data}] = useLazyQuery(FIND_PERSON)
   const [person, setPerson] = useState(null)
-  console.log(person)
-
+  
   const showPerson = name => {
+    console.log('showw')
     getPerson({ variables: { name } })
   }
-
+  
   useEffect(() => {
     console.log('enter')
-    if(result.data) {
-      setPerson(result.data.findPerson)
+    if(data) {
+      setPerson(data.findPerson)
     }
-  }, [result])
+  }, [data])
 
+  console.log({person})
+  
   if (person) {
     return (
       <div>
         <p>{person.name}</p>
         <p>{person.phone}</p>
         <p>{person.address.street}, {person.address.city}</p>
-        <button onClick={() => getPerson({ variables: { name: '' } })}>close</button>
+        <button onClick={() => setPerson(null)}>close</button>
       </div>
     )
   }
