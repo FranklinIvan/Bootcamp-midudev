@@ -15,6 +15,7 @@ const FIND_PERSON = gql`
   }
 `
 
+// this not works as expected, i do not understand wtf is useEffect working
 export const Persons = ({ persons }) => {
   const [getPerson, result] = useLazyQuery(FIND_PERSON)
   const [person, setPerson] = useState(null)
@@ -24,9 +25,7 @@ export const Persons = ({ persons }) => {
   }
 
   useEffect(() => {
-    console.log('useEffect')
     if (result.data) {
-      console.log('woa')
       setPerson(result.data.findPerson)
     }
   }, [result.data])

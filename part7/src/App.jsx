@@ -1,6 +1,7 @@
 import logo from './logo.svg'
 import './App.css'
 import { Persons } from './components/Persons'
+import { PhoneForm } from './components/PhoneForm'
 import { PersonForm } from './components/PersonForm'
 import { usePersons } from './persons/custom-hooks'
 
@@ -18,6 +19,7 @@ function App() {
             ? <p>loading...</p>
             : <Persons persons={data?.allPersons} />
         }
+        <PhoneForm />
         <PersonForm />
       </header>
     </div>
