@@ -1,23 +1,9 @@
-import { gql, useLazyQuery } from "@apollo/client"
 import { useState, useEffect } from "react"
-
-const FIND_PERSON = gql`
-  query findPerson($name: String!) {
-    findPerson(name: $name) {
-      id
-      name
-      phone
-      address {
-        street
-        city
-      }
-    }
-  }
-`
+import { useFindPerson } from "../persons/custom-hooks"
 
 // this not works as expected, i do not understand wtf is useEffect working
 export const Persons = ({ persons }) => {
-  const [getPerson, result] = useLazyQuery(FIND_PERSON)
+  const [getPerson, result] = useFindPerson()
   const [person, setPerson] = useState(null)
 
   const showPerson = name => {
@@ -33,8 +19,8 @@ export const Persons = ({ persons }) => {
   if (person) {
     return (
       <div>
-        <h2>asd</h2>
-        <p>{person.name}</p>
+        <h2>{person.name}</h2>
+        <p>{person.phone}</p>
         <button onClick={() => setPerson(null)}>close</button>
       </div>
     )

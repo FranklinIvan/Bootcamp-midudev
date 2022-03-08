@@ -13,3 +13,13 @@ export const ALL_PERSONS = gql`
     }
   }
 `
+
+export const FIND_PERSON = gql`
+  query findPerson($name: String!) {
+    findPerson(name: $name) {
+      id
+      name
+      phone
+    }
+  }
+`
