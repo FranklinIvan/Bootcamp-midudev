@@ -6,8 +6,14 @@ export const PersonForm = () => {
   const [phone, setPhone] = useState('')
   const [street, setStreet] = useState('')
   const [city, setCity] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+
+  const notifyError = message => {
+    setErrorMessage(message)
+    setTimeout(() => setErrorMessage(null), 3000)
+  }
   
-  const [createPerson] = useAddPerson()
+  const [createPerson] = useAddPerson({notifyError})
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -23,6 +29,7 @@ export const PersonForm = () => {
   return (
     <div>
       <h4>Add new person</h4>
+      <small style={{color: 'red'}}>{errorMessage}</small>
       <form onSubmit={handleSubmit}>
         <input placeholder='Name' value={name} onChange={e => setName(e.target.value)} />
         <input placeholder='Phone' value={phone} onChange={e => setPhone(e.target.value)} />
