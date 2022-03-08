@@ -2,8 +2,9 @@ import logo from './logo.svg'
 import './App.css'
 import { gql, useQuery } from '@apollo/client'
 import { Persons } from './components/Persons'
+import { PersonForm } from './components/PersonForm'
 
-const ALL_PERSONS = gql`
+export const ALL_PERSONS = gql`
   query {
     allPersons(phone: YES) {
       id
@@ -31,6 +32,7 @@ function App() {
             ? <p>suck my dick...</p>
             : <Persons persons={data?.allPersons} />
         }
+        <PersonForm />
       </header>
     </div>
   )
