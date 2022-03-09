@@ -1,5 +1,7 @@
+import 'dotenv/config'
 import { ApolloServer, gql, UserInputError } from 'apollo-server'
 import personsServices from './services/persons.js'
+import './database/db.js'
 
 const typeDefs = gql`
   enum YesNo {
