@@ -69,7 +69,8 @@ const resolvers = {
       if (!args.phone) return await Person.find({})
       return await Person.find({ phone: { $exists: args.phone === 'YES' } })
     },
-    findPerson: async (root, args) => await Person.findOne({ name: args.name })
+    findPerson: async (root, args) => await Person.findOne({ name: args.name }),
+    me: async (root, args, context) => context.currentUser
   },
   Mutation: {
     addPerson: async (root, args) => {
@@ -121,7 +122,9 @@ const resolvers = {
       }
 
       return {
-        value: jwt.sign(userForToken, JWT_SECRET)
+        value: jwt.sign(userForToken, JWT_SECRET, {
+          expiresIn: '7d'
+        })
       }
     }
   },
@@ -137,7 +140,16 @@ const resolvers = {
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers,
+  context: async ({ req }) => {
+    const auth = req ? req.headers.authorization : null
+    if (auth && auth.toLowerCase().startsWith('bearer ')) {
+      const token = auth.substring(7)
+      const { id } = jwt.verify(token, JWT_SECRET)
+      const currentUser = await User.findById(id).populate('friends')
+      return { currentUser }
+    }
+  }
 })
 
 server.listen().then(({ url }) => {
