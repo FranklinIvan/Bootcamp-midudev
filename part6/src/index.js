@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { ApolloServer, gql, UserInputError } from 'apollo-server'
+import { ApolloServer, AuthenticationError, gql, UserInputError } from 'apollo-server'
 import './database/db.js'
 import Person from './models/Person.js'
 import User from './models/User.js'
@@ -73,11 +73,15 @@ const resolvers = {
     me: async (root, args, context) => context.currentUser
   },
   Mutation: {
-    addPerson: async (root, args) => {
+    addPerson: async (root, args, context) => {
+      const { currentUser } = context
+      if (!currentUser) throw new AuthenticationError('not authorized')
       const person = new Person(args)
 
       try {
         await person.save()
+        currentUser.friends = currentUser.friends.concat(person)
+        currentUser.save()
       } catch (error) {
         throw new UserInputError(error.message, {
           invalidArgs: args
