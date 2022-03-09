@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { ApolloServer, gql, UserInputError } from 'apollo-server'
-import personsServices from './services/persons.js'
 import './database/db.js'
+import Person from './models/Person.js'
 
 const typeDefs = gql`
   enum YesNo {
@@ -43,48 +43,40 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    personCount: async () => {
-      const persons = await personsServices.getAllPersons()
-      return persons.length
-    },
+    personCount: async () => await Person.countDocuments(),
     allPersons: async (root, args) => {
-      const persons = await personsServices.getAllPersons()
-      if (!args.phone) return persons
-
-      const byPhone = person => {
-        return person.phone
-      }
-
-      return persons.filter(byPhone)
+      if (!args.phone) return await Person.find({})
+      return await Person.find({ phone: { $exists: args.phone === 'YES' } })
     },
-    findPerson: async (root, args) => {
-      const person = await personsServices.getOnePerson(args.name)
-      return person
-    }
+    findPerson: async (root, args) => await Person.findOne({ name: args.name })
   },
   Mutation: {
     addPerson: async (root, args) => {
-      const person = await personsServices.getOnePerson(args.name)
+      const person = new Person(args)
 
-      if (person) {
-        throw new UserInputError('Name must be unique', {
-          invalidArgs: args.name
+      try {
+        await person.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args
         })
       }
-      const newPerson = await personsServices.addNewPerson(args)
-      return newPerson
+      return person
     },
     editNumber: async (root, args) => {
-      const person = await personsServices.getOnePerson(args.name)
+      const person = await Person.findOne({ name: args.name })
+      if (!person) return
 
-      if (typeof person === 'undefined') {
-        throw new UserInputError('Name not found', {
-          invalidArgs: args.name
+      person.phone = args.phone
+
+      try {
+        await person.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args
         })
       }
-
-      const editedNumber = await personsServices.uptadePerson(args)
-      return editedNumber
+      return person
     }
   },
   Person: {
