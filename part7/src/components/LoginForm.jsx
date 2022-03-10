@@ -32,27 +32,27 @@ export const LoginForm = ({ setToken }) => {
 
   return (
     <div>
-    <h4>Login</h4>
-    <small style={{color: 'red'}}>{errorMessage}</small>
-    <form onSubmit={handleSubmit}>
-      <div>
-        Username: <input placeholder='Username' 
-          type='text'
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-        />
-      </div>
-      <div>
-        Password: <input placeholder='Password'
-          type='password' 
-          value={password}
-          onChange={e => setPassword(e.target.value)} 
-        />
-      </div>
-      <div>
-        <button>log in</button>
-      </div>
-    </form>
-  </div>
+      <h4>Login</h4>
+      <small style={{color: 'red'}}>{errorMessage}</small>
+      <form onSubmit={handleSubmit}>
+        <div>
+          Username: <input placeholder='Username' 
+            type='text'
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+          />
+        </div>
+        <div>
+          Password: <input placeholder='Password'
+            type='password' 
+            value={password}
+            onChange={e => setPassword(e.target.value)} 
+          />
+        </div>
+        <div>
+          <button>log in</button>
+        </div>
+      </form>
+    </div>
   )
 }
