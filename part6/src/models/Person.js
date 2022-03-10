@@ -24,6 +24,6 @@ const personSchema = new mongoose.Schema({
   }
 })
 
-personSchema.plugin(uniqueValidator)
+// personSchema.plugin(uniqueValidator)
 
 export default mongoose.model('Person', personSchema)
