@@ -9,7 +9,7 @@ import { LoginForm } from './components/LoginForm'
 
 function App() {
   const { data, error, loading } = usePersons()
-  const [token, setToken] = useState(null)
+  const [token, setToken] = useState(() => window.localStorage.getItem('phonenumbers-user-token'))
 
   if (error) return <span>{error}</span>
 
@@ -22,7 +22,7 @@ function App() {
             ? <p>loading...</p>
             : <Persons persons={data?.allPersons} />
         }
-        <LoginForm setToken={setToken} />
+        {!token && <LoginForm setToken={setToken} />}
         <PhoneForm />
         <PersonForm />
       </header>
