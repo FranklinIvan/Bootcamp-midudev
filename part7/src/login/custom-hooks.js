@@ -1,4 +1,4 @@
-import { useMutation } from "@apollo/client"
+import { useApolloClient, useMutation } from "@apollo/client"
 import { LOGIN } from "./graphql-mutations"
 
 export const useLogin = ({notifyError}) =>{
@@ -7,5 +7,10 @@ export const useLogin = ({notifyError}) =>{
       notifyError(error.graphQLErrors[0].message)
     }
   })
+  return result
+}
+
+export const useLogout = () => {
+  const result = useApolloClient()
   return result
 }
