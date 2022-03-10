@@ -28,6 +28,7 @@ const typeDefs = gql`
   type User {
     username: String!
     friends: [Person]!
+    id: ID!
   }
 
   type Token {
@@ -59,6 +60,9 @@ const typeDefs = gql`
       username: String!
       password: String!
     ): Token
+    addAsFriend(
+      name: String!
+    ): User
   }
 `
 
@@ -70,18 +74,17 @@ const resolvers = {
       return await Person.find({ phone: { $exists: args.phone === 'YES' } })
     },
     findPerson: async (root, args) => await Person.findOne({ name: args.name }),
-    me: async (root, args, context) => context.currentUser
+    me: async (root, args, { currentUser }) => currentUser
   },
   Mutation: {
-    addPerson: async (root, args, context) => {
-      const { currentUser } = context
+    addPerson: async (root, args, { currentUser }) => {
       if (!currentUser) throw new AuthenticationError('not authorized')
       const person = new Person(args)
 
       try {
         await person.save()
         currentUser.friends = currentUser.friends.concat(person)
-        currentUser.save()
+        await currentUser.save()
       } catch (error) {
         throw new UserInputError(error.message, {
           invalidArgs: args
@@ -130,6 +133,23 @@ const resolvers = {
           expiresIn: '7d'
         })
       }
+    },
+    addAsFriend: async (root, args, { currentUser }) => {
+      if (!currentUser) throw new AuthenticationError('not authorized')
+
+      const person = await Person.findOne({ name: args.name })
+      if (!person) return null
+
+      const notFriendYet = !currentUser.friends.map(p => p.name).includes(person.name)
+
+      if (notFriendYet) {
+        currentUser.friends = currentUser.friends.concat(person)
+        await currentUser.save()
+      } else {
+        throw new Error(`${person.name} is already your friend :)`)
+      }
+
+      return currentUser
     }
   },
   Person: {
