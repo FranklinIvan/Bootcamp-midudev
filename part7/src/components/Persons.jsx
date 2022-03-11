@@ -6,14 +6,11 @@ export const Persons = ({ persons }) => {
   const [getPerson, result] = useFindPerson()
   const [person, setPerson] = useState(null)
 
-  const showPerson = name => {
-    getPerson({ variables: { name } })
-  }
-
+  const showPerson = name => getPerson({ variables: { name } })
+  const closePerson = () => getPerson({variables : { name: '' }})
+  
   useEffect(() => {
-    if (result.data) {
-      setPerson(result.data.findPerson)
-    }
+    if (result.data) setPerson(result.data.findPerson)
   }, [result.data])
 
   if (person) {
@@ -21,7 +18,7 @@ export const Persons = ({ persons }) => {
       <div>
         <h2>{person.name}</h2>
         <p>{person.phone}</p>
-        <button onClick={() => setPerson(null)}>close</button>
+        <button onClick={closePerson}>close</button>
       </div>
     )
   }

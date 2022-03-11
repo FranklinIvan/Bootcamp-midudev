@@ -1,12 +1,12 @@
 import logo from './logo.svg'
 import './App.css'
+import { useState } from 'react'
 import { Persons } from './components/Persons'
 import { PhoneForm } from './components/PhoneForm'
-import { PersonForm } from './components/PersonForm'
-import { usePersons } from './persons/custom-hooks'
-import { useState } from 'react'
 import { LoginForm } from './components/LoginForm'
+import { PersonForm } from './components/PersonForm'
 import { useLogout } from './login/custom-hooks'
+import { usePersons } from './persons/custom-hooks'
 
 function App() {
   const { data, error, loading } = usePersons()
@@ -16,6 +16,7 @@ function App() {
   if (error) return <span>{error}</span>
 
   const logout = () => {
+    setToken(null)
     window.localStorage.removeItem('phonenumbers-user-token')
     client.resetStore()
   }
@@ -31,8 +32,8 @@ function App() {
         }
         {
           token
-          ? <button onClick={logout}>log out</button>
-          : <LoginForm setToken={setToken} />
+            ? <button onClick={logout}>log out</button>
+            : <LoginForm setToken={setToken} />
         }
         <PhoneForm />
         <PersonForm />

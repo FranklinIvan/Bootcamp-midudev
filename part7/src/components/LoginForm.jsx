@@ -1,5 +1,4 @@
-import { useState } from "react"
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
 import { useLogin } from "../login/custom-hooks"
 
 export const LoginForm = ({ setToken }) => {

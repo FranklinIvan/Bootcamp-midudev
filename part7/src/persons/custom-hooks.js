@@ -15,19 +15,14 @@ export const useFindPerson = () => {
 export const useAddPerson = ({ notifyError }) => {
   const result = useMutation(ADD_PERSON, {
     refetchQueries: [{ query: ALL_PERSONS }],
-    onError: error => {
-      notifyError(error.graphQLErrors[0].message)
-    }
+    onError: ({graphQLErrors}) => notifyError(graphQLErrors[0].message)
   })
-
   return result
 }
 
 export const useEditNumber = ({ notifyError }) => {
   const result = useMutation(EDIT_NUMBER, {
-    onError: error => {
-      notifyError(error.graphQLErrors[0].message)
-    }
+    onError: ({graphQLErrors}) => notifyError(graphQLErrors[0].message)
   })
   return result
 }

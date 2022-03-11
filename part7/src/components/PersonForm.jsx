@@ -4,8 +4,8 @@ import { useAddPerson } from "../persons/custom-hooks"
 export const PersonForm = () => {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
-  const [street, setStreet] = useState('')
   const [city, setCity] = useState('')
+  const [street, setStreet] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
 
   const notifyError = message => {
@@ -17,7 +17,6 @@ export const PersonForm = () => {
 
   const handleSubmit = e => {
     e.preventDefault()
-
     createPerson({ variables: { name, phone, street, city } })
     
     setName('')

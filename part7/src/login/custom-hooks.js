@@ -3,9 +3,7 @@ import { LOGIN } from "./graphql-mutations"
 
 export const useLogin = ({notifyError}) =>{
   const result = useMutation(LOGIN, {
-    onError: error => {
-      notifyError(error.graphQLErrors[0].message)
-    }
+    onError: ({graphQLErrors}) => notifyError(graphQLErrors[0].message)
   })
   return result
 }

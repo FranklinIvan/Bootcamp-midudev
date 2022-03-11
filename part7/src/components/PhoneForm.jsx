@@ -15,7 +15,6 @@ export const PhoneForm = () => {
 
   const handleSubmit = e => {
     e.preventDefault()
-
     editNumber({ variables: { name, phone } })
     
     setName('')
@@ -27,10 +26,18 @@ export const PhoneForm = () => {
       <h4>Edit phone number</h4>
       <small style={{color: 'red'}}>{errorMessage}</small>
       <form onSubmit={handleSubmit}>
-        <input placeholder='Name' value={name} onChange={e => setName(e.target.value)} />
-        <input placeholder='Phone' value={phone} onChange={e => setPhone(e.target.value)} />
+        <input 
+          placeholder='Name'
+          value={name}
+          onChange={e => setName(e.target.value)}
+        />
+        <input 
+          placeholder='Phone'
+          value={phone}
+          onChange={e => setPhone(e.target.value)}
+        />
         <div>
-          <button>add</button>
+          <button>edit</button>
         </div>
       </form>
     </div>
