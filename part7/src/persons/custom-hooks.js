@@ -14,8 +14,20 @@ export const useFindPerson = () => {
 
 export const useAddPerson = ({ notifyError }) => {
   const result = useMutation(ADD_PERSON, {
-    refetchQueries: [{ query: ALL_PERSONS }],
-    onError: ({graphQLErrors}) => notifyError(graphQLErrors[0].message)
+    onError: ({graphQLErrors}) => notifyError(graphQLErrors[0].message),
+    update: (store, response) => {
+      const dataInStore = store.readQuery({ query: ALL_PERSONS })
+      store.writeQuery({
+        query: ALL_PERSONS,
+        data: {
+          ...dataInStore,
+          allPersons: [
+            ...dataInStore.allPersons,
+            response.data.addPerson
+          ]
+        }
+      })
+    }
   })
   return result
 }
