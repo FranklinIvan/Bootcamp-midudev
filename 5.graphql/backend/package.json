@@ -1,11 +1,10 @@
 {
-  "name": "part6",
+  "name": "gql-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "server": "json-server --watch db.json",
     "dev": "nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,12 +16,13 @@
     "axios": "0.26.0",
     "dotenv": "16.0.0",
     "graphql": "16.3.0",
-    "json-server": "0.17.0",
     "jsonwebtoken": "8.5.1",
     "mongoose": "6.2.4",
     "mongoose-unique-validator": "3.0.0",
-    "standard": "16.0.4",
     "uuid": "8.3.2"
+  },
+  "devDependencies": {
+    "standard": "16.0.4"
   },
   "eslintConfig": {
     "extends": "./node_modules/standard/eslintrc.json"
