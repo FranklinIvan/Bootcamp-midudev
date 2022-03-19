@@ -7,13 +7,18 @@
     },
     {
       "content": "i really like working very much!!",
-      "important": true,
+      "important": false,
       "id": 2
     },
     {
       "content": "bro, thursday, im crazy!!",
       "important": true,
       "id": 3
+    },
+    {
+      "content": "this dude sucks!",
+      "important": false,
+      "id": 4
     }
   ]
 }
