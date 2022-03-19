@@ -4,16 +4,13 @@ import { useState } from 'react'
 
 // Ejercicio: no sé cuál es...
 const Title = () => {
-  console.log('Title render');
   return <h1>Hi there</h1>
 }
 const Counter = ({ number }) => {
-  console.log('Counter Render');
   return <p>{number}</p>
 }
 
 const App = () => {
-
   const [count, setCount] = useState(0);
 
   const handleClick = event => {
